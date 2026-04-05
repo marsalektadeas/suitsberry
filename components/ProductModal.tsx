@@ -81,14 +81,14 @@ export default function ProductModal({ product, onClose }: Props) {
             {product.images.map((img, i) => (
               <div
                 key={i}
-                className="relative w-full flex-shrink-0 snap-start"
+                className="relative w-full flex-shrink-0 snap-start bg-[#0A0A0A]"
                 style={{ aspectRatio: "3/4" }}
               >
                 <Image
                   src={img}
                   alt={`${product.name} ${i + 1}`}
                   fill
-                  className="object-cover object-top"
+                  className="object-contain"
                   sizes="100vw"
                   priority={i === 0}
                 />
@@ -161,15 +161,15 @@ export default function ProductModal({ product, onClose }: Props) {
 
       {/* ── DESKTOP modal (centered, max height) ── */}
       <div className="hidden md:flex relative z-10 w-full max-w-5xl bg-[#141414] overflow-hidden max-h-[88vh]">
-        {/* Left — images (55%) */}
-        <div className="w-[55%] flex-shrink-0 flex flex-col min-h-0">
-          <div className="relative flex-1 min-h-0">
+        {/* Left — images (65%) */}
+        <div className="w-[65%] flex-shrink-0 flex flex-col min-h-0">
+          <div className="relative flex-1 min-h-0 bg-[#0A0A0A]">
             <Image
               src={product.images[activeImage] ?? product.heroImage}
               alt={product.name}
               fill
-              className="object-cover object-top"
-              sizes="55vw"
+              className="object-contain"
+              sizes="65vw"
               priority
             />
           </div>
@@ -201,8 +201,8 @@ export default function ProductModal({ product, onClose }: Props) {
           )}
         </div>
 
-        {/* Right — details (45%) */}
-        <div className="w-[45%] overflow-y-auto p-8 xl:p-10 flex flex-col gap-5">
+        {/* Right — details (35%) */}
+        <div className="w-[35%] overflow-y-auto p-8 xl:p-10 flex flex-col gap-5">
           <p className="text-[#C8A028] text-sm tracking-[0.3em] uppercase">
             {product.category}
           </p>
