@@ -41,7 +41,7 @@ export default function Header() {
             <a
               key={link.href}
               href={link.href}
-              className="text-sm tracking-[0.15em] uppercase text-[#888580] hover:text-white transition-colors duration-200"
+              className="text-sm tracking-[0.15em] uppercase text-[#888580] hover:text-[#C8A028] transition-colors duration-200"
             >
               {link.label}
             </a>
