@@ -7,7 +7,7 @@ type FormState = {
   email: string;
   phone: string;
   message: string;
-
+  website: string; // honeypot
 };
 
 type Status = "idle" | "loading" | "success" | "error";
@@ -18,6 +18,7 @@ export default function Contact() {
     email: "",
     phone: "",
     message: "",
+    website: "",
   });
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
@@ -50,7 +51,7 @@ export default function Contact() {
       }
 
       setStatus("success");
-      setForm({ name: "", email: "", phone: "", message: "" });
+      setForm({ name: "", email: "", phone: "", message: "", website: "" });
     } catch {
       setErrorMsg("Připojení selhalo. Zkuste to prosím znovu.");
       setStatus("error");
@@ -120,6 +121,17 @@ export default function Contact() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} noValidate className="space-y-8">
+                {/* Honeypot — hidden from humans, bots fill this */}
+                <div style={{ position: "absolute", left: "-9999px", opacity: 0, pointerEvents: "none" }} aria-hidden="true">
+                  <input
+                    type="text"
+                    name="website"
+                    value={form.website}
+                    onChange={handleChange}
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                   <div>
                     <label className="block text-sm tracking-[0.2em] uppercase text-[#888580] mb-2">
