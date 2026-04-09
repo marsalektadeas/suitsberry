@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Resend } from "resend";
 
 type ContactPayload = {
   name: string;
@@ -35,14 +36,19 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Zpráva je povinná." }, { status: 422 });
   }
 
-  // Mock handler — v produkci napojit na e-mail (Resend, SendGrid) nebo CRM
-  console.log("[contact] Nová poptávka:", {
-    name: payload.name,
-    email: payload.email,
-    phone: payload.phone || "-",
-    message: payload.message,
-    interest: payload.interest || "-",
-    timestamp: new Date().toISOString(),
+  const resend = new Resend(process.env.RESEND_API_KEY);
+
+  await resend.emails.send({
+    from: "Suitsberry <onboarding@resend.dev>",
+    to: "marsalektadeas@gmail.com",
+    subject: `Nová poptávka od ${payload.name}`,
+    html: `
+      <p><strong>Jméno:</strong> ${payload.name}</p>
+      <p><strong>Email:</strong> ${payload.email}</p>
+      <p><strong>Telefon:</strong> ${payload.phone || "-"}</p>
+      <p><strong>Zájem:</strong> ${payload.interest || "-"}</p>
+      <p><strong>Zpráva:</strong><br/>${payload.message}</p>
+    `,
   });
 
   return NextResponse.json(
