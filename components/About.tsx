@@ -46,10 +46,10 @@ export default function About() {
               </p>
             </div>
 
-            <div className="mt-10 flex items-center gap-6">
-              <div className="w-10 h-px bg-[#C8A028]" />
+            <div className="group mt-10 flex items-center gap-6 cursor-default">
+              <div className="w-10 h-px bg-[#C8A028]/50 group-hover:bg-[#C8A028] transition-colors duration-300" />
               <p
-                className="text-[#F0EDE8]/70 text-lg italic font-light"
+                className="text-[#F0EDE8]/70 group-hover:text-[#C8A028] text-lg italic font-light transition-colors duration-300"
                 style={{ fontFamily: "Cormorant Garamond, Georgia, serif" }}
               >
                 „Styl není luxus. Je to nezbytnost."

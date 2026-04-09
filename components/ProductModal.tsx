@@ -76,7 +76,7 @@ export default function ProductModal({ product, onClose }: Props) {
             ref={carouselRef}
             onScroll={onCarouselScroll}
             className="flex overflow-x-auto snap-x snap-mandatory"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none", maxHeight: "52vh" }}
           >
             {product.images.map((img, i) => (
               <div
@@ -116,7 +116,7 @@ export default function ProductModal({ product, onClose }: Props) {
 
         {/* Details — scrollable */}
         <div className="overflow-y-auto flex-1 p-6 flex flex-col gap-4">
-          <p className="text-[#C8A028] text-xs tracking-[0.3em] uppercase">
+          <p className="text-[#C8A028] text-sm tracking-[0.3em] uppercase">
             {product.category}
           </p>
           <h2

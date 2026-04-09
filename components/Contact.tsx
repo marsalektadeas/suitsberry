@@ -7,7 +7,7 @@ type FormState = {
   email: string;
   phone: string;
   message: string;
-  interest: string;
+
 };
 
 type Status = "idle" | "loading" | "success" | "error";
@@ -18,7 +18,6 @@ export default function Contact() {
     email: "",
     phone: "",
     message: "",
-    interest: "",
   });
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
@@ -51,7 +50,7 @@ export default function Contact() {
       }
 
       setStatus("success");
-      setForm({ name: "", email: "", phone: "", message: "", interest: "" });
+      setForm({ name: "", email: "", phone: "", message: "" });
     } catch {
       setErrorMsg("Připojení selhalo. Zkuste to prosím znovu.");
       setStatus("error");
@@ -165,24 +164,6 @@ export default function Contact() {
                       placeholder="+420 777 000 000"
                       className={inputClass}
                     />
-                  </div>
-                  <div>
-                    <label className="block text-sm tracking-[0.2em] uppercase text-[#888580] mb-2">
-                      Typ zájmu
-                    </label>
-                    <select
-                      name="interest"
-                      value={form.interest}
-                      onChange={handleChange}
-                      className={`${inputClass} cursor-pointer`}
-                    >
-                      <option value="" className="bg-[#141414]">Vyberte...</option>
-                      <option value="business" className="bg-[#141414]">Business / pracovní</option>
-                      <option value="wedding" className="bg-[#141414]">Svatba / slavnostní</option>
-                      <option value="event" className="bg-[#141414]">Společenská akce</option>
-                      <option value="casual" className="bg-[#141414]">Neformální elegance</option>
-                      <option value="other" className="bg-[#141414]">Jiné</option>
-                    </select>
                   </div>
                 </div>
 

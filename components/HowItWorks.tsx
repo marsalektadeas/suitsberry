@@ -42,19 +42,19 @@ export default function HowItWorks() {
             {steps.map((item, i) => (
               <div
                 key={item.step}
-                className={`py-10 flex gap-8 items-start ${
+                className={`group py-10 flex gap-8 items-start cursor-default ${
                   i < steps.length - 1 ? "border-b border-white/8" : ""
                 }`}
               >
                 <span
-                  className="text-[3.5rem] font-light text-[#C8A028]/25 leading-none mt-1 select-none"
+                  className="text-[3.5rem] font-light text-[#C8A028]/25 group-hover:text-[#C8A028]/70 leading-none mt-1 select-none transition-colors duration-300"
                   style={{ fontFamily: "Cormorant Garamond, Georgia, serif" }}
                 >
                   {item.step}
                 </span>
                 <div>
                   <h3
-                    className="text-xl font-light text-white mb-2"
+                    className="text-2xl md:text-3xl font-light text-white group-hover:text-[#C8A028] mb-2 transition-colors duration-300"
                     style={{ fontFamily: "Cormorant Garamond, Georgia, serif" }}
                   >
                     {item.title}

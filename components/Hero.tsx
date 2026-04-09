@@ -1,10 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Hero() {
   const textRef = useRef<HTMLDivElement>(null);
+  const [sloganActive, setSloganActive] = useState(false);
 
   useEffect(() => {
     const el = textRef.current;
@@ -63,6 +64,26 @@ export default function Hero() {
             <em className="not-italic text-[#C8A028]">za vás.</em>
           </h1>
 
+          <div
+            className="flex items-center gap-5 mb-6 cursor-default"
+            onMouseEnter={() => setSloganActive(true)}
+            onMouseLeave={() => setSloganActive(false)}
+          >
+            <div
+              className="w-10 h-px transition-colors duration-500"
+              style={{ backgroundColor: sloganActive ? "#C8A028" : "rgba(200,160,40,0.6)" }}
+            />
+            <p
+              className="text-base md:text-lg tracking-[0.25em] md:tracking-[0.45em] uppercase font-light transition-colors duration-500"
+              style={{
+                fontFamily: "Cormorant Garamond, Georgia, serif",
+                color: sloganActive ? "#C8A028" : "rgba(240,237,232,0.5)",
+              }}
+            >
+              Tailored for distinction
+            </p>
+          </div>
+
           <p className="text-[#888580] text-base md:text-lg font-light leading-relaxed mb-10 max-w-md">
             Prémiové pánské obleky pro muže, kteří chtějí zanechat
             správný dojem — na každé příležitosti.
@@ -72,6 +93,8 @@ export default function Hero() {
             <a
               href="#kontakt"
               className="inline-flex items-center justify-center px-8 py-4 bg-[#C8A028] text-[#0A0A0A] text-sm tracking-[0.2em] uppercase font-medium hover:bg-[#D4AF40] transition-colors duration-200"
+              onMouseEnter={() => setSloganActive(true)}
+              onMouseLeave={() => setSloganActive(false)}
             >
               Nezávazně poptat
             </a>

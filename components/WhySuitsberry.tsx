@@ -41,14 +41,14 @@ export default function WhySuitsberry() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
           {reasons.map((reason) => (
-            <div key={reason.number} className="border-t border-white/10 pt-8">
+            <div key={reason.number} className="group border-t border-white/10 pt-8 cursor-default">
               <p
-                className="text-[#C8A028]/30 text-4xl font-light mb-6"
+                className="text-[#C8A028]/30 group-hover:text-[#C8A028]/80 text-4xl font-light mb-6 transition-colors duration-300"
                 style={{ fontFamily: "Cormorant Garamond, Georgia, serif" }}
               >
                 {reason.number}
               </p>
-              <h3 className="text-white text-lg font-light tracking-wide mb-3">
+              <h3 className="text-white group-hover:text-[#C8A028] text-lg font-light tracking-wide mb-3 transition-colors duration-300">
                 {reason.title}
               </h3>
               <p className="text-[#888580] text-base leading-relaxed">
