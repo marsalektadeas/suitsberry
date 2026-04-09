@@ -89,7 +89,7 @@ export default function Contact() {
             <div className="space-y-4">
               <div className="flex items-center gap-4">
                 <div className="w-8 h-px bg-[#C8A028]" />
-                <p className="text-[#F0EDE8] text-base">info@suitsberry.cz</p>
+                <p className="text-[#F0EDE8] text-base">+420 731 152 421</p>
               </div>
               <div className="flex items-center gap-4">
                 <div className="w-8 h-px bg-[#C8A028]" />
