@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
+import CookieBanner from "@/components/CookieBanner";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -14,14 +15,19 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://suitsberry.cz"),
   title: "Suitsberry — Prémiové pánské obleky",
   description:
     "Suitsberry je značka prémiových pánských obleků pro muže, kteří chtějí zanechat správný dojem. Osobní přístup, dokonalý střih, elegantní styl.",
+  alternates: {
+    canonical: "https://suitsberry.cz",
+  },
   openGraph: {
     title: "Suitsberry — Prémiové pánské obleky",
     description:
       "Prémiové pánské obleky pro muže, kteří chtějí zanechat správný dojem.",
     type: "website",
+    url: "https://suitsberry.cz",
     locale: "cs_CZ",
     siteName: "Suitsberry",
   },
@@ -51,7 +57,30 @@ export default function RootLayout({
         } as React.CSSProperties
       }
     >
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full">
+        {children}
+        <CookieBanner />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Suitsberry",
+              url: "https://suitsberry.cz",
+              logo: "https://suitsberry.cz/logo.png",
+              description:
+                "Prémiové pánské obleky pro muže, kteří chtějí zanechat správný dojem.",
+              telephone: "+420731152421",
+              address: {
+                "@type": "PostalAddress",
+                addressCountry: "CZ",
+              },
+              sameAs: [],
+            }),
+          }}
+        />
+      </body>
     </html>
   );
 }

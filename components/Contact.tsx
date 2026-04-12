@@ -203,7 +203,7 @@ export default function Contact() {
                   />
                   <label htmlFor="gdpr" className="text-sm text-[#888580] leading-relaxed">
                     Souhlasím se{" "}
-                    <a href="#" className="underline hover:text-[#F0EDE8] transition-colors">
+                    <a href="/zasady-ochrany-osobnich-udaju" className="underline hover:text-[#F0EDE8] transition-colors">
                       zpracováním osobních údajů
                     </a>{" "}
                     za účelem odpovědi na mou poptávku.

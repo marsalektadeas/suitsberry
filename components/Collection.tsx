@@ -1,12 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { products, type Product } from "@/data/products";
 import ProductCard from "./ProductCard";
 import ProductModal from "./ProductModal";
 
 export default function Collection() {
   const [selected, setSelected] = useState<Product | null>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  const updateArrows = useCallback(() => {
+    const el = carouselRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 10);
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
+  }, []);
+
+  const scroll = (dir: "left" | "right") => {
+    const el = carouselRef.current;
+    if (!el) return;
+    const cardWidth = el.clientWidth * 0.78 + 20; // 78vw + gap
+    el.scrollBy({ left: dir === "right" ? cardWidth : -cardWidth, behavior: "smooth" });
+  };
 
   return (
     <>
@@ -33,8 +50,45 @@ export default function Collection() {
             </p>
           </div>
 
-          {/* Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-14">
+          {/* Mobile: horizontal carousel */}
+          <div className="sm:hidden relative">
+            {/* Left arrow */}
+            <button
+              onClick={() => scroll("left")}
+              aria-label="Předchozí"
+              className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 -translate-x-1 flex items-center justify-center w-9 h-9 rounded-full bg-[#0A0A0A]/80 border border-[#C8A028]/40 text-[#C8A028] transition-opacity duration-200 ${canScrollLeft ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M10 3L5 8L10 13" stroke="#C8A028" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+
+            {/* Right arrow */}
+            <button
+              onClick={() => scroll("right")}
+              aria-label="Další"
+              className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 translate-x-1 flex items-center justify-center w-9 h-9 rounded-full bg-[#0A0A0A]/80 border border-[#C8A028]/40 text-[#C8A028] transition-opacity duration-200 ${canScrollRight ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M6 3L11 8L6 13" stroke="#C8A028" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+
+            <div
+              ref={carouselRef}
+              onScroll={updateArrows}
+              className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide -mx-6 px-6 gap-5 pb-2"
+            >
+              {products.filter((p) => !p.hidden).map((product) => (
+                <div key={product.id} className="snap-start flex-none w-[78vw]">
+                  <ProductCard product={product} onSelect={setSelected} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop: grid */}
+          <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-14">
             {products.filter((p) => !p.hidden).map((product) => (
               <ProductCard
                 key={product.id}
