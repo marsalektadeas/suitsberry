@@ -50,24 +50,26 @@ export default function CookieBanner() {
               </a>
               .
             </p>
-            <div className="flex items-center gap-3 flex-shrink-0">
+            <div className="flex flex-col gap-2 w-full sm:w-auto sm:flex-shrink-0">
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => save({ analytical: false, marketing: false })}
+                  className="flex-1 sm:flex-none px-5 py-2.5 border border-white/20 text-[#F0EDE8] text-sm tracking-[0.15em] uppercase hover:border-white/40 transition-colors duration-200"
+                >
+                  Odmítnout
+                </button>
+                <button
+                  onClick={acceptAll}
+                  className="flex-1 sm:flex-none px-5 py-2.5 bg-[#C8A028] text-[#0A0A0A] text-sm tracking-[0.15em] uppercase font-medium hover:bg-[#D4AF40] transition-colors duration-200"
+                >
+                  Přijmout vše
+                </button>
+              </div>
               <button
                 onClick={() => setModalOpen(true)}
-                className="text-sm tracking-[0.15em] uppercase text-[#888580] hover:text-[#F0EDE8] transition-colors duration-200 whitespace-nowrap border-b border-white/20 pb-0.5"
+                className="text-xs tracking-[0.15em] uppercase text-[#555] hover:text-[#888580] transition-colors duration-200 text-center sm:text-left"
               >
-                Nastavit
-              </button>
-              <button
-                onClick={() => save({ analytical: false, marketing: false })}
-                className="px-5 py-2.5 border border-white/20 text-[#F0EDE8] text-sm tracking-[0.15em] uppercase hover:border-white/40 transition-colors duration-200 whitespace-nowrap"
-              >
-                Odmítnout
-              </button>
-              <button
-                onClick={acceptAll}
-                className="px-5 py-2.5 bg-[#C8A028] text-[#0A0A0A] text-sm tracking-[0.15em] uppercase font-medium hover:bg-[#D4AF40] transition-colors duration-200 whitespace-nowrap"
-              >
-                Přijmout vše
+                Nastavit předvolby
               </button>
             </div>
           </div>
