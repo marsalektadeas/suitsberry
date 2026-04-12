@@ -58,6 +58,12 @@ export default function CookieBanner() {
                 Nastavit
               </button>
               <button
+                onClick={() => save({ analytical: false, marketing: false })}
+                className="px-5 py-2.5 border border-white/20 text-[#F0EDE8] text-sm tracking-[0.15em] uppercase hover:border-white/40 transition-colors duration-200 whitespace-nowrap"
+              >
+                Odmítnout
+              </button>
+              <button
                 onClick={acceptAll}
                 className="px-5 py-2.5 bg-[#C8A028] text-[#0A0A0A] text-sm tracking-[0.15em] uppercase font-medium hover:bg-[#D4AF40] transition-colors duration-200 whitespace-nowrap"
               >
