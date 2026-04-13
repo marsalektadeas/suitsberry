@@ -33,7 +33,7 @@ export default function About() {
               <br />o oblek.
             </h2>
 
-            <div className="space-y-5 text-[#888580] leading-relaxed">
+            <div className="space-y-5 text-[#A09C97] leading-relaxed">
               <p>
                 Je to o pocitu, když vstoupíte do místnosti a víte, že vypadáte
                 správně. O sebevědomí, které nepotřebuje slova. O detailu, který

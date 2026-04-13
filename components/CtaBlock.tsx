@@ -26,7 +26,7 @@ export default function CtaBlock() {
               <br />
               <em className="not-italic">změnit dojem?</em>
             </h2>
-            <p className="text-[#888580] text-base leading-relaxed mb-10 max-w-sm">
+            <p className="text-[#A09C97] text-base leading-relaxed mb-10 max-w-sm">
               Nezávazná konzultace je zdarma. Stačí napsat — ozveme se do 24 hodin.
             </p>
             <a

@@ -49,7 +49,7 @@ export default function FAQ() {
               <br />
               <em className="not-italic text-[#C8A028]">otázky?</em>
             </h2>
-            <p className="text-[#888580] text-base leading-relaxed max-w-sm">
+            <p className="text-[#A09C97] text-base leading-relaxed max-w-sm">
               Nejčastější dotazy na jednom místě. Nezodpovězeno? Napište nám —
               odpovíme do 24 hodin.
             </p>
@@ -86,7 +86,7 @@ export default function FAQ() {
                     open === i ? "max-h-64 pb-7" : "max-h-0"
                   }`}
                 >
-                  <p className="text-[#888580] text-base leading-relaxed">
+                  <p className="text-[#A09C97] text-base leading-relaxed">
                     {faq.a}
                   </p>
                 </div>

@@ -84,7 +84,7 @@ export default function Hero() {
             </p>
           </div>
 
-          <p className="text-[#888580] text-base md:text-lg font-light leading-relaxed mb-10 max-w-md">
+          <p className="text-[#A09C97] text-base md:text-lg font-light leading-relaxed mb-10 max-w-md">
             Prémiové pánské obleky pro muže, kteří chtějí zanechat
             správný dojem — na každé příležitosti.
           </p>

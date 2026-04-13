@@ -44,7 +44,7 @@ export default function Collection() {
                 <em className="not-italic text-[#C8A028]">výjimečný moment.</em>
               </h2>
             </div>
-            <p className="text-[#888580] max-w-xs leading-relaxed text-base md:text-right">
+            <p className="text-[#A09C97] max-w-xs leading-relaxed text-base md:text-right">
               Každý oblek je pečlivě vybraný tak, aby odpovídal charakteru muže,
               který ho nosí. Kliknutím zobrazíte detail.
             </p>
@@ -101,7 +101,7 @@ export default function Collection() {
           {/* Bottom CTA */}
           <div className="mt-20 text-center">
             <p
-              className="text-[#888580] mb-8 text-2xl md:text-3xl font-light"
+              className="text-[#A09C97] mb-8 text-2xl md:text-3xl font-light"
               style={{ fontFamily: "Cormorant Garamond, Georgia, serif" }}
             >
               Nenašli jste, co hledáte?

@@ -40,7 +40,7 @@ export default function CookieBanner() {
       {!modalOpen && (
         <div className="fixed bottom-0 left-0 right-0 z-[200] bg-[#141414] border-t border-white/8 px-6 py-5">
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <p className="text-[#888580] text-sm leading-relaxed max-w-2xl">
+            <p className="text-[#A09C97] text-sm leading-relaxed max-w-2xl">
               Používáme soubory cookie pro zajištění funkčnosti webu. Více informací v{" "}
               <a
                 href="/zasady-ochrany-osobnich-udaju"
@@ -67,7 +67,7 @@ export default function CookieBanner() {
               </div>
               <button
                 onClick={() => setModalOpen(true)}
-                className="text-xs tracking-[0.15em] uppercase text-[#555] hover:text-[#888580] transition-colors duration-200 text-center sm:text-left"
+                className="text-xs tracking-[0.15em] uppercase text-[#555] hover:text-[#A09C97] transition-colors duration-200 text-center sm:text-left"
               >
                 Nastavit předvolby
               </button>
@@ -91,13 +91,13 @@ export default function CookieBanner() {
               </h2>
               <button
                 onClick={() => setModalOpen(false)}
-                className="text-[#888580] hover:text-white transition-colors duration-200 ml-4 mt-1"
+                className="text-[#A09C97] hover:text-white transition-colors duration-200 ml-4 mt-1"
                 aria-label="Zavřít"
               >
                 ✕
               </button>
             </div>
-            <p className="text-[#888580] text-sm mb-8">
+            <p className="text-[#A09C97] text-sm mb-8">
               Upravte si cookies dle vlastních preferencí.
             </p>
 
@@ -172,7 +172,7 @@ function CookieRow({ title, description, enabled, locked, onChange }: CookieRowP
     <div className="flex items-start justify-between gap-4 py-4 border-b border-white/8">
       <div>
         <p className="text-[#F0EDE8] text-sm font-medium mb-0.5">{title}</p>
-        <p className="text-[#888580] text-xs leading-relaxed">{description}</p>
+        <p className="text-[#A09C97] text-xs leading-relaxed">{description}</p>
       </div>
       <button
         role="switch"

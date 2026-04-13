@@ -169,7 +169,7 @@ export default function ProductModal({ product, onClose }: Props) {
           >
             {product.name}
           </h2>
-          <p className="text-[#888580] leading-relaxed text-sm">
+          <p className="text-[#A09C97] leading-relaxed text-sm">
             {product.description}
           </p>
           <div className="flex flex-col">
@@ -178,7 +178,7 @@ export default function ProductModal({ product, onClose }: Props) {
                 key={spec.label}
                 className="flex items-center justify-between py-2.5 border-b border-white/8"
               >
-                <span className="text-[#888580] text-sm">{spec.label}</span>
+                <span className="text-[#A09C97] text-sm">{spec.label}</span>
                 <span className="text-[#F0EDE8] text-sm text-right">
                   {spec.value}
                 </span>
@@ -294,7 +294,7 @@ export default function ProductModal({ product, onClose }: Props) {
             >
               {product.name}
             </h2>
-            <p className="text-[#888580] leading-relaxed text-base">
+            <p className="text-[#A09C97] leading-relaxed text-base">
               {product.description}
             </p>
             <div className="w-full h-px bg-white/8" />
@@ -304,7 +304,7 @@ export default function ProductModal({ product, onClose }: Props) {
                   key={spec.label}
                   className="flex items-center justify-between py-3 border-b border-white/8"
                 >
-                  <span className="text-[#888580] text-base">{spec.label}</span>
+                  <span className="text-[#A09C97] text-base">{spec.label}</span>
                   <span className="text-[#F0EDE8] text-base text-right">
                     {spec.value}
                   </span>
@@ -314,7 +314,7 @@ export default function ProductModal({ product, onClose }: Props) {
 
             {product.colors.length > 0 && (
               <div>
-                <p className="text-sm tracking-[0.2em] uppercase text-[#888580] mb-3">
+                <p className="text-sm tracking-[0.2em] uppercase text-[#A09C97] mb-3">
                   Dostupné barvy
                 </p>
                 <div className="flex gap-2">

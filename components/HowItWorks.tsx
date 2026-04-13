@@ -47,7 +47,7 @@ export default function HowItWorks() {
                 }`}
               >
                 <span
-                  className="text-[3.5rem] font-light text-[#C8A028]/25 group-hover:text-[#C8A028]/70 leading-none mt-1 select-none transition-colors duration-300"
+                  className="text-[3.5rem] font-light text-[#C8A028]/55 group-hover:text-[#C8A028] leading-none mt-1 select-none transition-colors duration-300"
                   style={{ fontFamily: "Cormorant Garamond, Georgia, serif" }}
                 >
                   {item.step}
@@ -59,7 +59,7 @@ export default function HowItWorks() {
                   >
                     {item.title}
                   </h3>
-                  <p className="text-[#888580] leading-relaxed text-base">
+                  <p className="text-[#A09C97] leading-relaxed text-base">
                     {item.text}
                   </p>
                 </div>

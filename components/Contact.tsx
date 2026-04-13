@@ -81,7 +81,7 @@ export default function Contact() {
               </em>
             </h2>
 
-            <p className="text-[#888580] leading-relaxed mb-10 text-base max-w-sm">
+            <p className="text-[#A09C97] leading-relaxed mb-10 text-base max-w-sm">
               Každá konzultace je zdarma a nezávazná. Rádi vám pomůžeme najít
               správný oblek — na každou příležitost, pro každý charakter.
             </p>
@@ -109,12 +109,12 @@ export default function Contact() {
                 >
                   Zpráva odeslána.
                 </h3>
-                <p className="text-[#888580] text-base mb-8">
+                <p className="text-[#A09C97] text-base mb-8">
                   Ozveme se vám do 24 hodin. Těšíme se na spolupráci.
                 </p>
                 <button
                   onClick={() => setStatus("idle")}
-                  className="text-sm tracking-[0.2em] uppercase text-[#888580] border-b border-white/10 pb-1 hover:text-white hover:border-white/30 transition-colors duration-200"
+                  className="text-sm tracking-[0.2em] uppercase text-[#A09C97] border-b border-white/10 pb-1 hover:text-white hover:border-white/30 transition-colors duration-200"
                 >
                   Odeslat další zprávu
                 </button>
@@ -134,7 +134,7 @@ export default function Contact() {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                   <div>
-                    <label className="block text-sm tracking-[0.2em] uppercase text-[#888580] mb-2">
+                    <label className="block text-sm tracking-[0.2em] uppercase text-[#A09C97] mb-2">
                       Jméno *
                     </label>
                     <input
@@ -148,7 +148,7 @@ export default function Contact() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm tracking-[0.2em] uppercase text-[#888580] mb-2">
+                    <label className="block text-sm tracking-[0.2em] uppercase text-[#A09C97] mb-2">
                       E-mail *
                     </label>
                     <input
@@ -165,7 +165,7 @@ export default function Contact() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                   <div>
-                    <label className="block text-sm tracking-[0.2em] uppercase text-[#888580] mb-2">
+                    <label className="block text-sm tracking-[0.2em] uppercase text-[#A09C97] mb-2">
                       Telefon
                     </label>
                     <input
@@ -180,7 +180,7 @@ export default function Contact() {
                 </div>
 
                 <div>
-                  <label className="block text-sm tracking-[0.2em] uppercase text-[#888580] mb-2">
+                  <label className="block text-sm tracking-[0.2em] uppercase text-[#A09C97] mb-2">
                     Zpráva *
                   </label>
                   <textarea
@@ -201,7 +201,7 @@ export default function Contact() {
                     required
                     className="mt-1 accent-[#C8A028]"
                   />
-                  <label htmlFor="gdpr" className="text-sm text-[#888580] leading-relaxed">
+                  <label htmlFor="gdpr" className="text-sm text-[#A09C97] leading-relaxed">
                     Souhlasím se{" "}
                     <a href="/zasady-ochrany-osobnich-udaju" className="underline hover:text-[#F0EDE8] transition-colors">
                       zpracováním osobních údajů

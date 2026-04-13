@@ -16,7 +16,7 @@ export default function PrivacyPolicy() {
       <div className="max-w-3xl mx-auto px-6 py-24 md:py-36">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-sm tracking-[0.2em] uppercase text-[#888580] hover:text-[#C8A028] transition-colors duration-200 mb-16"
+          className="inline-flex items-center gap-2 text-sm tracking-[0.2em] uppercase text-[#A09C97] hover:text-[#C8A028] transition-colors duration-200 mb-16"
         >
           <span>←</span> Zpět na web
         </Link>
@@ -32,7 +32,7 @@ export default function PrivacyPolicy() {
           <em className="not-italic text-[#C8A028]">osobních údajů</em>
         </h1>
 
-        <div className="space-y-10 text-[#888580] text-base leading-relaxed">
+        <div className="space-y-10 text-[#A09C97] text-base leading-relaxed">
           <section>
             <h2 className="text-white text-xl font-light mb-3">
               1. Správce osobních údajů

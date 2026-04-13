@@ -52,10 +52,10 @@ export default function Footer() {
             © {currentYear} Suitsberry. Všechna práva vyhrazena.
           </p>
           <div className="flex gap-6">
-            <a href="#" className="text-sm tracking-[0.1em] uppercase text-[#333] hover:text-[#888580] transition-colors duration-200">
+            <a href="#" className="text-sm tracking-[0.1em] uppercase text-[#333] hover:text-[#A09C97] transition-colors duration-200">
               Ochrana osobních údajů
             </a>
-            <a href="#" className="text-sm tracking-[0.1em] uppercase text-[#333] hover:text-[#888580] transition-colors duration-200">
+            <a href="#" className="text-sm tracking-[0.1em] uppercase text-[#333] hover:text-[#A09C97] transition-colors duration-200">
               Podmínky užití
             </a>
           </div>
