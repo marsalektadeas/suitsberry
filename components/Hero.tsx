@@ -49,10 +49,6 @@ export default function Hero() {
           }}
           className="max-w-xl"
         >
-          <p className="text-[#C8A028] text-sm tracking-[0.3em] uppercase mb-6">
-            Prémiové pánské obleky
-          </p>
-
           <h1
             className="text-[2.8rem] sm:text-[3.5rem] md:text-[5rem] leading-[1.05] font-light text-white mb-6"
             style={{ fontFamily: "Cormorant Garamond, Georgia, serif" }}

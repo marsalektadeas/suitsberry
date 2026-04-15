@@ -1,3 +1,7 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+
 const reasons = [
   {
     number: "01",
@@ -22,13 +26,37 @@ const reasons = [
 ];
 
 export default function WhySuitsberry() {
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+
+    const cards = grid.querySelectorAll<HTMLDivElement>(".reason-card");
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          cards.forEach((card, i) => {
+            setTimeout(() => {
+              card.style.opacity = "1";
+              card.style.transform = "translateY(0)";
+            }, i * 150);
+          });
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(grid);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section id="proc-my" className="py-24 md:py-36 bg-[#111111]">
       <div className="max-w-7xl mx-auto px-6 md:px-10">
         <div className="mb-20">
-          <p className="text-[#C8A028] text-sm tracking-[0.3em] uppercase mb-4">
-            Proč Suitsberry
-          </p>
           <h2
             className="text-[2.8rem] md:text-[3.8rem] leading-[1.1] font-light text-white max-w-2xl"
             style={{ fontFamily: "Cormorant Garamond, Georgia, serif" }}
@@ -39,9 +67,20 @@ export default function WhySuitsberry() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+        <div
+          ref={gridRef}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12"
+        >
           {reasons.map((reason) => (
-            <div key={reason.number} className="group border-t border-white/10 pt-8 cursor-default">
+            <div
+              key={reason.number}
+              className="reason-card group border-t border-white/10 pt-8 cursor-default"
+              style={{
+                opacity: 0,
+                transform: "translateY(40px)",
+                transition: "opacity 0.7s ease, transform 0.7s ease",
+              }}
+            >
               <p
                 className="text-[#C8A028]/60 group-hover:text-[#C8A028] text-4xl font-light mb-6 transition-colors duration-300"
                 style={{ fontFamily: "Cormorant Garamond, Georgia, serif" }}

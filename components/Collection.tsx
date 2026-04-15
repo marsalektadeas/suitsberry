@@ -32,9 +32,6 @@ export default function Collection() {
           {/* Header */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
             <div>
-              <p className="text-[#C8A028] text-sm tracking-[0.3em] uppercase mb-4">
-                Kolekce
-              </p>
               <h2
                 className="text-[2.8rem] md:text-[3.8rem] leading-[1.1] font-light text-white"
                 style={{ fontFamily: "Cormorant Garamond, Georgia, serif" }}

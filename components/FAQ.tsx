@@ -38,9 +38,6 @@ export default function FAQ() {
         <div className="grid md:grid-cols-2 gap-16 md:gap-24 items-start">
           {/* Left — heading */}
           <div className="md:sticky md:top-32">
-            <p className="text-[#C8A028] text-sm tracking-[0.3em] uppercase mb-4">
-              Časté otázky
-            </p>
             <h2
               className="text-[2.8rem] md:text-[3.8rem] leading-[1.1] font-light text-white mb-6"
               style={{ fontFamily: "Cormorant Garamond, Georgia, serif" }}

@@ -16,13 +16,13 @@ export default function Footer() {
           <div className="flex flex-col gap-1">
             <a
               href="#"
-              className="text-2xl tracking-[0.25em] font-light text-white"
+              className="text-3xl tracking-[0.25em] font-light text-white"
               style={{ fontFamily: "Cormorant Garamond, Georgia, serif" }}
             >
               SUITSBERRY
             </a>
             <p
-              className="text-[#444] text-sm tracking-[0.35em] uppercase"
+              className="text-[#888580] text-sm tracking-[0.35em] uppercase mt-1"
               style={{ fontFamily: "Cormorant Garamond, Georgia, serif" }}
             >
               Tailored for distinction
@@ -34,28 +34,28 @@ export default function Footer() {
               <a
                 key={link.href}
                 href={link.href}
-                className="text-sm tracking-[0.2em] uppercase text-[#444] hover:text-[#C8A028] transition-colors duration-300"
+                className="text-sm tracking-[0.2em] uppercase text-[#888580] hover:text-[#C8A028] transition-colors duration-300"
               >
                 {link.label}
               </a>
             ))}
           </nav>
 
-          <div className="text-[#444] text-base space-y-1">
+          <div className="text-[#888580] text-base space-y-1">
             <p>+420 731 152 421</p>
           </div>
         </div>
 
         {/* Bottom */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <p className="text-[#333] text-sm">
+          <p className="text-[#666] text-sm">
             © {currentYear} Suitsberry. Všechna práva vyhrazena.
           </p>
           <div className="flex gap-6">
-            <a href="#" className="text-sm tracking-[0.1em] uppercase text-[#333] hover:text-[#A09C97] transition-colors duration-200">
+            <a href="/zasady-ochrany-osobnich-udaju" className="text-sm tracking-[0.1em] uppercase text-[#666] hover:text-[#A09C97] transition-colors duration-200">
               Ochrana osobních údajů
             </a>
-            <a href="#" className="text-sm tracking-[0.1em] uppercase text-[#333] hover:text-[#A09C97] transition-colors duration-200">
+            <a href="/podminky-uziti" className="text-sm tracking-[0.1em] uppercase text-[#666] hover:text-[#A09C97] transition-colors duration-200">
               Podmínky užití
             </a>
           </div>

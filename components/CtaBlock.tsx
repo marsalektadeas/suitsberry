@@ -12,9 +12,6 @@ export default function CtaBlock() {
         <div className="grid md:grid-cols-2 gap-0 items-stretch md:min-h-[560px]">
           {/* Left — text */}
           <div className="flex flex-col justify-center py-20 md:py-24 md:pr-16">
-            <p className="text-[#C8A028] text-sm tracking-[0.3em] uppercase mb-6">
-              Začněte dnes
-            </p>
             <h2
               className="text-[3rem] md:text-[4rem] leading-[1.05] font-light mb-8 transition-colors duration-300"
               style={{
@@ -50,9 +47,9 @@ export default function CtaBlock() {
                 sizes="20vw"
               />
             </div>
-            <div className="relative overflow-hidden mt-8">
+            <div className="relative overflow-hidden">
               <Image
-                src="/products/camel/hero.jpg"
+                src="/products/blue/hero.jpg"
                 alt="Suitsberry kolekce"
                 fill
                 className="object-cover object-top"

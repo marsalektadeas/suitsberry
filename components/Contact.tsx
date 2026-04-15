@@ -64,12 +64,9 @@ export default function Contact() {
   return (
     <section id="kontakt" className="py-24 md:py-36 bg-[#111111]">
       <div className="max-w-7xl mx-auto px-6 md:px-10">
-        <div className="grid md:grid-cols-2 gap-16 md:gap-24">
+        <div className="grid md:grid-cols-2 gap-16 md:gap-24 items-start">
           {/* Left — info */}
-          <div>
-            <p className="text-[#C8A028] text-sm tracking-[0.3em] uppercase mb-4">
-              Kontakt
-            </p>
+          <div className="md:sticky md:top-32">
             <h2
               className="text-[2.8rem] md:text-[3.8rem] leading-[1.1] font-light text-white mb-8"
               style={{ fontFamily: "Cormorant Garamond, Georgia, serif" }}
