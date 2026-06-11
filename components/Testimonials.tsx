@@ -24,12 +24,6 @@ const testimonials = [
   },
 ];
 
-const stats = [
-  { value: "500+", label: "spokojených mužů" },
-  { value: "24 h", label: "průměrná reakce" },
-  { value: "46–66", label: "dostupných velikostí" },
-];
-
 export default function Testimonials() {
   const gridRef = useRef<HTMLDivElement>(null);
 
@@ -76,7 +70,7 @@ export default function Testimonials() {
         {/* Quotes */}
         <div
           ref={gridRef}
-          className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12 mb-20 md:mb-24"
+          className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12"
         >
           {testimonials.map((t) => (
             <figure
@@ -109,23 +103,6 @@ export default function Testimonials() {
                 </span>
               </figcaption>
             </figure>
-          ))}
-        </div>
-
-        {/* Stat band */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-8 border-t border-white/10 pt-12">
-          {stats.map((s) => (
-            <div key={s.label} className="text-center sm:text-left">
-              <p
-                className="text-[3rem] md:text-[3.5rem] leading-none font-light text-white mb-2"
-                style={{ fontFamily: "Cormorant Garamond, Georgia, serif" }}
-              >
-                {s.value}
-              </p>
-              <p className="text-[#A09C97] text-sm tracking-[0.15em] uppercase">
-                {s.label}
-              </p>
-            </div>
           ))}
         </div>
       </div>
