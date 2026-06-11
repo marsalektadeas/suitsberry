@@ -85,7 +85,7 @@ export default function Header() {
           href="#kontakt"
           className="hidden md:inline-flex items-center px-5 py-2.5 bg-[#C8A028] text-[#0A0A0A] text-sm tracking-[0.15em] uppercase font-medium hover:bg-[#D4AF40] transition-colors duration-200"
         >
-          Poptat oblek
+          Nezávazně poptat
         </a>
 
         {/* Mobile menu button */}

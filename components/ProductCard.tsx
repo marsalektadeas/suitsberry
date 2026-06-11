@@ -11,8 +11,17 @@ type Props = {
 export default function ProductCard({ product, onSelect }: Props) {
   return (
     <article
-      className="group cursor-pointer"
+      role="button"
+      tabIndex={0}
+      aria-label={`${product.name} — zobrazit detail`}
+      className="group cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-[#C8A028] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0A]"
       onClick={() => onSelect(product)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onSelect(product);
+        }
+      }}
     >
       {/* Image */}
       <div className="relative aspect-[3/4] overflow-hidden bg-[#1C1C1C] mb-5">

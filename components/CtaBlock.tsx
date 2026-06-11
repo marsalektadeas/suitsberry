@@ -32,7 +32,7 @@ export default function CtaBlock() {
               onMouseEnter={() => setActive(true)}
               onMouseLeave={() => setActive(false)}
             >
-              Poptat oblek
+              Nezávazně poptat
             </a>
           </div>
 
