@@ -26,7 +26,6 @@ export default function Hero() {
           alt="Suitsberry — prémiový pánský oblek"
           fill
           priority
-          unoptimized
           className="object-cover object-[55%_top]"
           sizes="100vw"
         />

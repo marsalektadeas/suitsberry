@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import type { Product } from "@/data/products";
+import { requestEnquiry } from "@/lib/enquiry";
 
 type Props = {
   product: Product;
@@ -13,9 +14,22 @@ export default function ProductModal({ product, onClose }: Props) {
   const [activeImage, setActiveImage] = useState(0);
   const [mobileScrollProgress, setMobileScrollProgress] = useState(0);
   const [desktopScrollProgress, setDesktopScrollProgress] = useState(0);
+  const [specsOpen, setSpecsOpen] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
   const mobileDetailsRef = useRef<HTMLDivElement>(null);
   const desktopDetailsRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  const handleEnquire = () => {
+    requestEnquiry({
+      productName: product.name,
+      productColor: product.colors[0]?.name,
+    });
+    onClose();
+    requestAnimationFrame(() => {
+      document.getElementById("kontakt")?.scrollIntoView({ behavior: "smooth" });
+    });
+  };
 
   const calcProgress = (el: HTMLDivElement) => {
     const max = el.scrollHeight - el.clientHeight;
@@ -26,6 +40,7 @@ export default function ProductModal({ product, onClose }: Props) {
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
+    closeRef.current?.focus();
     return () => {
       document.body.style.overflow = "";
     };
@@ -63,7 +78,12 @@ export default function ProductModal({ product, onClose }: Props) {
   ];
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center md:p-8">
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center md:p-8"
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${product.name} — detail obleku`}
+    >
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/80 backdrop-blur-sm"
@@ -72,6 +92,7 @@ export default function ProductModal({ product, onClose }: Props) {
 
       {/* Close button — always on top, always visible */}
       <button
+        ref={closeRef}
         onClick={onClose}
         className="absolute top-4 right-4 z-[110] w-10 h-10 flex items-center justify-center bg-[#141414] border border-white/40 text-white hover:border-white transition-colors duration-200"
         aria-label="Zavřít"
@@ -172,31 +193,57 @@ export default function ProductModal({ product, onClose }: Props) {
           <p className="text-[#A09C97] leading-relaxed text-sm">
             {product.description}
           </p>
-          <div className="flex flex-col">
-            {specs.map((spec) => (
-              <div
-                key={spec.label}
-                className="flex items-center justify-between py-2.5 border-b border-white/8"
+          <p className="text-[#C8A028] text-sm tracking-[0.2em] uppercase">
+            {product.occasion}
+          </p>
+          <div>
+            <button
+              onClick={() => setSpecsOpen((v) => !v)}
+              className="w-full flex items-center justify-between py-3 border-t border-white/8 text-left"
+              aria-expanded={specsOpen}
+            >
+              <span className="text-sm tracking-[0.2em] uppercase text-[#A09C97]">
+                Technické detaily
+              </span>
+              <span
+                className={`text-[#C8A028] text-lg leading-none transition-transform duration-300 ${
+                  specsOpen ? "rotate-45" : ""
+                }`}
               >
-                <span className="text-[#A09C97] text-sm">{spec.label}</span>
-                <span className="text-[#F0EDE8] text-sm text-right">
-                  {spec.value}
-                </span>
+                +
+              </span>
+            </button>
+            <div
+              className={`overflow-hidden transition-all duration-300 ${
+                specsOpen ? "max-h-96" : "max-h-0"
+              }`}
+            >
+              <div className="flex flex-col pt-1">
+                {specs.map((spec) => (
+                  <div
+                    key={spec.label}
+                    className="flex items-center justify-between py-2.5 border-b border-white/8"
+                  >
+                    <span className="text-[#A09C97] text-sm">{spec.label}</span>
+                    <span className="text-[#F0EDE8] text-sm text-right">
+                      {spec.value}
+                    </span>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </div>
         </div>
 
         {/* CTA — always visible at bottom */}
         <div className="flex-shrink-0 p-6 pt-4 flex flex-col gap-3 border-t border-white/8">
-          <a
-            href="#kontakt"
-            onClick={onClose}
+          <button
+            onClick={handleEnquire}
             className="inline-flex items-center justify-center px-6 py-4 bg-[#C8A028] text-[#0A0A0A] text-sm tracking-[0.15em] uppercase font-medium hover:bg-[#D4AF40] transition-colors duration-200 text-center"
           >
-            Mám zájem — domluvit konzultaci
-          </a>
+            Nezávazně poptat tento styl
+          </button>
           <button
             onClick={onClose}
             className="inline-flex items-center justify-center px-6 py-4 border border-white/20 text-[#F0EDE8] text-sm tracking-[0.15em] uppercase hover:border-white/40 transition-colors duration-200"
@@ -297,20 +344,9 @@ export default function ProductModal({ product, onClose }: Props) {
             <p className="text-[#A09C97] leading-relaxed text-base">
               {product.description}
             </p>
-            <div className="w-full h-px bg-white/8" />
-            <div className="flex flex-col">
-              {specs.map((spec) => (
-                <div
-                  key={spec.label}
-                  className="flex items-center justify-between py-3 border-b border-white/8"
-                >
-                  <span className="text-[#A09C97] text-base">{spec.label}</span>
-                  <span className="text-[#F0EDE8] text-base text-right">
-                    {spec.value}
-                  </span>
-                </div>
-              ))}
-            </div>
+            <p className="text-[#C8A028] text-sm tracking-[0.2em] uppercase">
+              {product.occasion}
+            </p>
 
             {product.colors.length > 0 && (
               <div>
@@ -329,18 +365,55 @@ export default function ProductModal({ product, onClose }: Props) {
                 </div>
               </div>
             )}
+
+            <div>
+              <button
+                onClick={() => setSpecsOpen((v) => !v)}
+                className="w-full flex items-center justify-between py-3 border-t border-white/8 text-left"
+                aria-expanded={specsOpen}
+              >
+                <span className="text-sm tracking-[0.2em] uppercase text-[#A09C97]">
+                  Technické detaily
+                </span>
+                <span
+                  className={`text-[#C8A028] text-lg leading-none transition-transform duration-300 ${
+                    specsOpen ? "rotate-45" : ""
+                  }`}
+                >
+                  +
+                </span>
+              </button>
+              <div
+                className={`overflow-hidden transition-all duration-300 ${
+                  specsOpen ? "max-h-96" : "max-h-0"
+                }`}
+              >
+                <div className="flex flex-col pt-1">
+                  {specs.map((spec) => (
+                    <div
+                      key={spec.label}
+                      className="flex items-center justify-between py-3 border-b border-white/8"
+                    >
+                      <span className="text-[#A09C97] text-base">{spec.label}</span>
+                      <span className="text-[#F0EDE8] text-base text-right">
+                        {spec.value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
           </div>
 
           {/* CTA — always visible at bottom */}
           <div className="flex-shrink-0 p-8 xl:p-10 pt-4 flex flex-col gap-3 border-t border-white/8">
-            <a
-              href="#kontakt"
-              onClick={onClose}
+            <button
+              onClick={handleEnquire}
               className="inline-flex items-center justify-center px-6 py-4 bg-[#C8A028] text-[#0A0A0A] text-sm tracking-[0.15em] uppercase font-medium hover:bg-[#D4AF40] transition-colors duration-200 text-center"
             >
-              Mám zájem — domluvit konzultaci
-            </a>
+              Nezávazně poptat tento styl
+            </button>
             <button
               onClick={onClose}
               className="inline-flex items-center justify-center px-6 py-4 border border-white/20 text-[#F0EDE8] text-sm tracking-[0.15em] uppercase hover:border-white/40 transition-colors duration-200"

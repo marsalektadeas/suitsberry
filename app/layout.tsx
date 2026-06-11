@@ -68,7 +68,7 @@ export default function RootLayout({
               "@type": "Organization",
               name: "Suitsberry",
               url: "https://suitsberry.cz",
-              logo: "https://suitsberry.cz/logo.png",
+              logo: "https://suitsberry.cz/logo.svg",
               description:
                 "Prémiové pánské obleky pro muže, kteří chtějí zanechat správný dojem.",
               telephone: "+420731152421",

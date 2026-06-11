@@ -4,6 +4,7 @@ import About from "@/components/About";
 import Collection from "@/components/Collection";
 import WhySuitsberry from "@/components/WhySuitsberry";
 import HowItWorks from "@/components/HowItWorks";
+import Testimonials from "@/components/Testimonials";
 import CtaBlock from "@/components/CtaBlock";
 import FAQ from "@/components/FAQ";
 import Contact from "@/components/Contact";
@@ -19,6 +20,7 @@ export default function Home() {
         <Collection />
         <WhySuitsberry />
         <HowItWorks />
+        <Testimonials />
         <CtaBlock />
         <FAQ />
         <Contact />

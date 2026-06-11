@@ -42,20 +42,22 @@ export default function Footer() {
           </nav>
 
           <div className="text-[#888580] text-base space-y-1">
-            <p>+420 731 152 421</p>
+            <a href="tel:+420731152421" className="hover:text-[#C8A028] transition-colors duration-200">
+              +420 731 152 421
+            </a>
           </div>
         </div>
 
         {/* Bottom */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <p className="text-[#666] text-sm">
+          <p className="text-[#888580] text-sm">
             © {currentYear} Suitsberry. Všechna práva vyhrazena.
           </p>
           <div className="flex gap-6">
-            <a href="/zasady-ochrany-osobnich-udaju" className="text-sm tracking-[0.1em] uppercase text-[#666] hover:text-[#A09C97] transition-colors duration-200">
+            <a href="/zasady-ochrany-osobnich-udaju" className="text-sm tracking-[0.1em] uppercase text-[#888580] hover:text-[#F0EDE8] transition-colors duration-200">
               Ochrana osobních údajů
             </a>
-            <a href="/podminky-uziti" className="text-sm tracking-[0.1em] uppercase text-[#666] hover:text-[#A09C97] transition-colors duration-200">
+            <a href="/podminky-uziti" className="text-sm tracking-[0.1em] uppercase text-[#888580] hover:text-[#F0EDE8] transition-colors duration-200">
               Podmínky užití
             </a>
           </div>

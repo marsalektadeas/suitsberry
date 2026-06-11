@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { ENQUIRY_EVENT, type EnquiryDetail } from "@/lib/enquiry";
 
 type FormState = {
   name: string;
@@ -22,6 +23,21 @@ export default function Contact() {
   });
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
+
+  // Prefill zprávy, když uživatel klikne „Nezávazně poptat" u konkrétního obleku
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const { productName, productColor } = (e as CustomEvent<EnquiryDetail>).detail;
+      const colorPart = productColor ? ` (${productColor})` : "";
+      setStatus("idle");
+      setForm((prev) => ({
+        ...prev,
+        message: `Mám zájem o styl ${productName}${colorPart}. Rád bych domluvil nezávaznou konzultaci.`,
+      }));
+    };
+    window.addEventListener(ENQUIRY_EVENT, handler);
+    return () => window.removeEventListener(ENQUIRY_EVENT, handler);
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -59,7 +75,7 @@ export default function Contact() {
   };
 
   const inputClass =
-    "w-full bg-transparent border-b border-white/12 py-3 text-[#F0EDE8] placeholder-[#444] text-base focus:outline-none focus:border-[#C8A028] transition-colors duration-200";
+    "w-full bg-transparent border-b border-white/12 py-3 text-[#F0EDE8] placeholder-[#6f6b66] text-base focus:outline-none focus:border-[#C8A028] transition-colors duration-200";
 
   return (
     <section id="kontakt" className="py-24 md:py-36 bg-[#111111]">
@@ -84,14 +100,18 @@ export default function Contact() {
             </p>
 
             <div className="space-y-4">
-              <div className="flex items-center gap-4">
+              <a href="tel:+420731152421" className="flex items-center gap-4 group w-fit">
                 <div className="w-8 h-px bg-[#C8A028]" />
-                <p className="text-[#F0EDE8] text-base">+420 731 152 421</p>
-              </div>
-              <div className="flex items-center gap-4">
+                <span className="text-[#F0EDE8] text-base group-hover:text-[#C8A028] transition-colors duration-200">
+                  +420 731 152 421
+                </span>
+              </a>
+              <a href="mailto:info@suitsberry.cz" className="flex items-center gap-4 group w-fit">
                 <div className="w-8 h-px bg-[#C8A028]" />
-                <p className="text-[#F0EDE8] text-base">www.suitsberry.cz</p>
-              </div>
+                <span className="text-[#F0EDE8] text-base group-hover:text-[#C8A028] transition-colors duration-200">
+                  info@suitsberry.cz
+                </span>
+              </a>
             </div>
           </div>
 
