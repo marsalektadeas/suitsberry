@@ -89,10 +89,7 @@ export default function Testimonials() {
               >
                 &ldquo;
               </span>
-              <blockquote
-                className="text-[#F0EDE8]/90 text-xl md:text-2xl font-light leading-relaxed mb-8"
-                style={{ fontFamily: "Cormorant Garamond, Georgia, serif" }}
-              >
+              <blockquote className="text-[#E8E5E0] text-lg md:text-xl leading-relaxed mb-8">
                 {t.quote}
               </blockquote>
               <figcaption className="flex items-center gap-3">
