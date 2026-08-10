@@ -70,7 +70,7 @@ export default function ProductModal({ product, onClose }: Props) {
 
   const specs = [
     { label: "Barva", value: product.specs.barva },
-    { label: "Střih", value: product.specs.strich },
+    { label: "Střih", value: product.specs.strih },
     { label: "Zapínání", value: product.specs.zapinani },
     { label: "Vzor", value: product.specs.vzor },
     { label: "Materiál", value: product.specs.material },

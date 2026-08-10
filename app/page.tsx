@@ -9,15 +9,18 @@ import CtaBlock from "@/components/CtaBlock";
 import FAQ from "@/components/FAQ";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import { getVisibleProducts } from "@/lib/products-store";
 
-export default function Home() {
+export default async function Home() {
+  const products = await getVisibleProducts();
+
   return (
     <>
       <Header />
       <main>
         <Hero />
         <About />
-        <Collection />
+        <Collection products={products} />
         <WhySuitsberry />
         <HowItWorks />
         <Testimonials />
