@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import { products, type Product } from "@/data/products";
+import { type Product } from "@/data/products";
 import ProductCard from "./ProductCard";
 import ProductModal from "./ProductModal";
 
-export default function Collection() {
+/** `products` už přichází bez skrytých kusů — filtruje je `getVisibleProducts()`. */
+export default function Collection({ products }: { products: Product[] }) {
   const [selected, setSelected] = useState<Product | null>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -47,6 +48,13 @@ export default function Collection() {
             </p>
           </div>
 
+          {products.length === 0 && (
+            <p className="text-[#A09C97] text-lg py-10 border-y border-[#C8A028]/20">
+              Kolekce se právě obměňuje. Napište nám a rádi vám doporučíme oblek
+              na míru vaší příležitosti.
+            </p>
+          )}
+
           {/* Mobile: horizontal carousel */}
           <div className="sm:hidden relative">
             {/* Left arrow */}
@@ -76,7 +84,7 @@ export default function Collection() {
               onScroll={updateArrows}
               className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide -mx-6 px-6 gap-5 pb-2"
             >
-              {products.filter((p) => !p.hidden).map((product) => (
+              {products.map((product) => (
                 <div key={product.id} className="snap-start flex-none w-[78vw]">
                   <ProductCard product={product} onSelect={setSelected} />
                 </div>
@@ -86,7 +94,7 @@ export default function Collection() {
 
           {/* Desktop: grid */}
           <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-14">
-            {products.filter((p) => !p.hidden).map((product) => (
+            {products.map((product) => (
               <ProductCard
                 key={product.id}
                 product={product}

@@ -1,3 +1,12 @@
+/**
+ * Produkty se za běhu čtou z Vercel Blobu (`lib/products-store.ts`).
+ * Tento soubor drží typy a výchozí sadu, která slouží dvěma účelům:
+ *  1. výchozí stav — dokud v Blobu nic není, admin i web pracují s touhle sadou
+ *     a první uložení v adminu ji zapíše do Blobu,
+ *  2. fallback — když Blob neodpoví, web zobrazí tuhle sadu místo prázdné kolekce.
+ * Úpravy produktů dělej v adminu na /admin, ne tady.
+ */
+
 export type ProductColor = {
   name: string
   hex: string
@@ -15,7 +24,7 @@ export type Product = {
   occasion: string
   specs: {
     barva: string
-    strich: string
+    strih: string
     zapinani: string
     vzor: string
     material: string
@@ -42,7 +51,7 @@ export const products: Product[] = [
     occasion: "Svatba · Slavnostní",
     specs: {
       barva: "Světle modrá",
-      strich: "Slim Fit",
+      strih: "Slim Fit",
       zapinani: "Jednořadý",
       vzor: "Jednobarevný, bez vzoru",
       material: "65% Polyamid, 30% Viskóza, 5% Lycra",
@@ -68,7 +77,7 @@ export const products: Product[] = [
     occasion: "Večírek · Business",
     specs: {
       barva: "Espresso hnědá",
-      strich: "Slim Fit",
+      strih: "Slim Fit",
       zapinani: "Jednořadý",
       vzor: "Hladký, bez vzoru",
       material: "65% Polyamid, 30% Viskóza, 5% Lycra",
@@ -95,7 +104,7 @@ export const products: Product[] = [
     occasion: "Business · Prezentace",
     specs: {
       barva: "Tmavě modrá s proužkem",
-      strich: "Regular Fit",
+      strih: "Regular Fit",
       zapinani: "Dvouřadý",
       vzor: "Jemný proužek",
       material: "100% Vlna, 100% Viskóza",
@@ -120,7 +129,7 @@ export const products: Product[] = [
     occasion: "Slavnostní · Premium",
     specs: {
       barva: "Červená",
-      strich: "Slim Fit",
+      strih: "Slim Fit",
       zapinani: "Jednořadý",
       vzor: "Hladký",
       material: "100% Vlna, 100% Viskóza",
@@ -147,7 +156,7 @@ export const products: Product[] = [
     occasion: "Svatba · Večírek",
     specs: {
       barva: "Smaragdová zelená",
-      strich: "Slim Fit",
+      strih: "Slim Fit",
       zapinani: "Jednořadý",
       vzor: "Hladký",
       material: "100% Vlna, 100% Viskóza",
@@ -174,7 +183,7 @@ export const products: Product[] = [
     occasion: "Business · Formální",
     specs: {
       barva: "Královská modrá",
-      strich: "Slim Fit",
+      strih: "Slim Fit",
       zapinani: "Jednořadý",
       vzor: "Hladký",
       material: "100% Vlna, 100% Viskóza",
@@ -200,7 +209,7 @@ export const products: Product[] = [
     occasion: "Business · Společenský",
     specs: {
       barva: "Karamelová / zlatavá",
-      strich: "Slim Fit",
+      strih: "Slim Fit",
       zapinani: "Jednořadý",
       vzor: "Hladký",
       material: "100% Vlna, 100% Viskóza",
@@ -225,7 +234,7 @@ export const products: Product[] = [
     occasion: "Formální · Společenský",
     specs: {
       barva: "Béžová",
-      strich: "Regular Fit",
+      strih: "Regular Fit",
       zapinani: "Dvouřadý",
       vzor: "Hladký, AMF stehování",
       material: "100% Vlna",
@@ -250,7 +259,7 @@ export const products: Product[] = [
     occasion: "Business · Formální",
     specs: {
       barva: "Tmavá s proužkem",
-      strich: "Slim Fit",
+      strih: "Slim Fit",
       zapinani: "Dvouřadý",
       vzor: "Hrubý proužek",
       material: "100% Vlna, 100% Viskóza",
@@ -276,7 +285,7 @@ export const products: Product[] = [
     occasion: "Gala · Večerní",
     specs: {
       barva: "Černá",
-      strich: "Slim Fit",
+      strih: "Slim Fit",
       zapinani: "Jednořadý",
       vzor: "Hladký",
       material: "100% Vlna, 100% Viskóza",
