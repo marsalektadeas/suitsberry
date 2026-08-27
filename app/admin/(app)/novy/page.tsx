@@ -15,8 +15,13 @@ async function loadDocument(): Promise<ProductsDocument | null> {
   }
 }
 
-export default async function NewProductPage() {
+export default async function NewProductPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ copyFrom?: string }>;
+}) {
   const document = await loadDocument();
+  const { copyFrom: copyFromId } = await searchParams;
 
   if (!document) {
     return (
@@ -27,10 +32,17 @@ export default async function NewProductPage() {
     );
   }
 
+  // Předloha pro tlačítko „Kopírovat“ v seznamu — neplatné/smazané ID prostě
+  // ignorujeme a formulář zůstane prázdný, ať se nic nerozbije.
+  const copyFrom = copyFromId
+    ? (document.products.find((item) => item.id === copyFromId) ?? null)
+    : null;
+
   return (
     <ProductForm
       mode="create"
       product={null}
+      copyFrom={copyFrom}
       allProducts={document.products}
       updatedAt={document.updatedAt}
     />

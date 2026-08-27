@@ -13,6 +13,11 @@ type ProductFormProps = {
   mode: "create" | "edit";
   /** Editovaný oblek, nebo `null` při zakládání nového. */
   product: Product | null;
+  /**
+   * Předloha pro předvyplnění nového obleku (jen `mode: "create"`).
+   * Vlastní identifikátor se nekopíruje — vygeneruje se z názvu jako obvykle.
+   */
+  copyFrom?: Product | null;
   /** Celá kolekce — ukládá se najednou a hlídá se z ní jedinečnost identifikátoru. */
   allProducts: Product[];
   updatedAt: string;
@@ -66,6 +71,19 @@ function toDraft(product: Product): Draft {
   };
 }
 
+/**
+ * Předvyplní nový formulář z existujícího obleku. Na rozdíl od `toDraft`
+ * dopíše do názvu „(kopie)“ a kopii schová, ať se omylem nezveřejní dřív,
+ * než ji autor projde — pořadí, fotky i parametry se přebírají beze změny.
+ */
+function toCopyDraft(source: Product): Draft {
+  return {
+    ...toDraft(source),
+    name: `${source.name} (kopie)`.slice(0, 80),
+    hidden: true,
+  };
+}
+
 /** Doplní pořadové číslo, pokud identifikátor odvozený z názvu už existuje. */
 function uniqueId(base: string, taken: Set<string>): string {
   if (!taken.has(base)) return base;
@@ -78,15 +96,17 @@ function uniqueId(base: string, taken: Set<string>): string {
 export default function ProductForm({
   mode,
   product,
+  copyFrom,
   allProducts,
   updatedAt,
 }: ProductFormProps) {
   const router = useRouter();
 
-  const initialDraft = useMemo(
-    () => (product ? toDraft(product) : EMPTY_DRAFT),
-    [product],
-  );
+  const initialDraft = useMemo(() => {
+    if (product) return toDraft(product);
+    if (copyFrom) return toCopyDraft(copyFrom);
+    return EMPTY_DRAFT;
+  }, [product, copyFrom]);
 
   const [draft, setDraft] = useState<Draft>(initialDraft);
   const [isSaving, setIsSaving] = useState(false);
