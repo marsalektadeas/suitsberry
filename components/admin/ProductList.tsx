@@ -233,6 +233,13 @@ export default function ProductList({
                   >
                     Upravit
                   </Link>
+                  <Link
+                    href={`/admin/novy?copyFrom=${product.id}`}
+                    title="Předvyplní nový formulář daty tohoto obleku."
+                    className="flex h-9 items-center rounded-sm px-3 text-sm text-[#A09C97] transition-colors duration-200 hover:text-[#C8A028] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C8A028]"
+                  >
+                    Kopírovat
+                  </Link>
                   <button
                     type="button"
                     onClick={() => toggleHidden(product)}
