@@ -8,7 +8,7 @@ type FormState = {
   email: string;
   phone: string;
   message: string;
-  website: string; // honeypot
+  hp_field: string; // honeypot
 };
 
 type Status = "idle" | "loading" | "success" | "error";
@@ -19,7 +19,7 @@ export default function Contact() {
     email: "",
     phone: "",
     message: "",
-    website: "",
+    hp_field: "",
   });
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
@@ -67,7 +67,7 @@ export default function Contact() {
       }
 
       setStatus("success");
-      setForm({ name: "", email: "", phone: "", message: "", website: "" });
+      setForm({ name: "", email: "", phone: "", message: "", hp_field: "" });
     } catch {
       setErrorMsg("Připojení selhalo. Zkuste to prosím znovu.");
       setStatus("error");
@@ -142,11 +142,11 @@ export default function Contact() {
                 <div style={{ position: "absolute", left: "-9999px", opacity: 0, pointerEvents: "none" }} aria-hidden="true">
                   <input
                     type="text"
-                    name="website"
-                    value={form.website}
+                    name="hp_field"
+                    value={form.hp_field}
                     onChange={handleChange}
                     tabIndex={-1}
-                    autoComplete="off"
+                    autoComplete="one-time-code"
                   />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
