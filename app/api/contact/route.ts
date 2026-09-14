@@ -26,7 +26,7 @@ type ContactPayload = {
   email: string;
   phone?: string;
   message: string;
-  website?: string; // honeypot
+  hp_field?: string; // honeypot
 };
 
 export async function POST(request: NextRequest) {
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
   const payload = body as ContactPayload;
 
   // Honeypot check — bots fill this, humans don't
-  if (payload.website) {
+  if (payload.hp_field) {
     return NextResponse.json(
       { success: true, message: "Zpráva přijata. Ozveme se do 24 hodin." },
       { status: 200 }
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
 
   const resend = new Resend(process.env.RESEND_API_KEY);
 
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from: "Suitsberry <onboarding@resend.dev>",
     to: "marsalektadeas@gmail.com",
     subject: `Nová poptávka od ${payload.name}`,
@@ -85,6 +85,14 @@ export async function POST(request: NextRequest) {
       <p><strong>Zpráva:</strong><br/>${payload.message}</p>
     `,
   });
+
+  if (error) {
+    console.error("Resend send failed:", error);
+    return NextResponse.json(
+      { error: "Odeslání se nezdařilo. Zkuste to prosím znovu nebo nám zavolejte." },
+      { status: 502 }
+    );
+  }
 
   return NextResponse.json(
     { success: true, message: "Zpráva přijata. Ozveme se do 24 hodin." },
