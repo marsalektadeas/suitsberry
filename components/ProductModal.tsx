@@ -1,9 +1,42 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import type { Product } from "@/data/products";
-import { requestEnquiry } from "@/lib/enquiry";
+import OrderForm from "./OrderForm";
+
+const calcProgress = (el: HTMLElement) => {
+  const max = el.scrollHeight - el.clientHeight;
+  return max > 0 ? el.scrollTop / max : 1;
+};
+
+const isAtBottom = (progress: number) => progress >= 0.98;
+
+/**
+ * Sleduje, kolik detailu je doscrollováno. Přepočítává se i při změně velikosti
+ * obsahu (rozbalení technických detailů, otočení mobilu) — jinak by hint
+ * „Více o produktu" svítil i tam, kde není kam scrollovat.
+ */
+function useScrollProgress() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [progress, setProgress] = useState(1);
+
+  const update = useCallback(() => {
+    if (ref.current) setProgress(calcProgress(ref.current));
+  }, []);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(el);
+    Array.from(el.children).forEach((child) => observer.observe(child));
+    return () => observer.disconnect();
+  }, [update]);
+
+  return { ref, progress, update };
+}
 
 type Props = {
   product: Product;
@@ -12,31 +45,25 @@ type Props = {
 
 export default function ProductModal({ product, onClose }: Props) {
   const [activeImage, setActiveImage] = useState(0);
-  const [mobileScrollProgress, setMobileScrollProgress] = useState(0);
-  const [desktopScrollProgress, setDesktopScrollProgress] = useState(0);
   const [specsOpen, setSpecsOpen] = useState(false);
+  const [orderOpen, setOrderOpen] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
-  const mobileDetailsRef = useRef<HTMLDivElement>(null);
-  const desktopDetailsRef = useRef<HTMLDivElement>(null);
+  const {
+    ref: mobileDetailsRef,
+    progress: mobileProgress,
+    update: updateMobileProgress,
+  } = useScrollProgress();
+  const {
+    ref: desktopDetailsRef,
+    progress: desktopProgress,
+    update: updateDesktopProgress,
+  } = useScrollProgress();
   const closeRef = useRef<HTMLButtonElement>(null);
 
-  const handleEnquire = () => {
-    requestEnquiry({
-      productName: product.name,
-      productColor: product.colors[0]?.name,
-    });
-    onClose();
-    requestAnimationFrame(() => {
-      document.getElementById("kontakt")?.scrollIntoView({ behavior: "smooth" });
-    });
-  };
-
-  const calcProgress = (el: HTMLDivElement) => {
-    const max = el.scrollHeight - el.clientHeight;
-    return max > 0 ? el.scrollTop / max : 1;
-  };
-
-  const isAtBottom = (progress: number) => progress >= 0.98;
+  const closeOrder = useCallback(() => {
+    setOrderOpen(false);
+    closeRef.current?.focus();
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -48,11 +75,14 @@ export default function ProductModal({ product, onClose }: Props) {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key !== "Escape") return;
+      // Escape zavře nejdřív objednávku, teprve pak detail.
+      if (orderOpen) closeOrder();
+      else onClose();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
+  }, [onClose, orderOpen, closeOrder]);
 
   const scrollToImage = (index: number) => {
     const el = carouselRef.current;
@@ -152,21 +182,21 @@ export default function ProductModal({ product, onClose }: Props) {
           <div className="absolute right-0 top-0 bottom-0 w-[2px] bg-white/8 z-10">
             <div
               className="w-full bg-[#C8A028] transition-all duration-100"
-              style={{ height: `${mobileScrollProgress * 100}%` }}
+              style={{ height: `${mobileProgress * 100}%` }}
             />
           </div>
           {/* Bottom fade + scroll hint */}
           <div
-            className="absolute bottom-0 left-0 right-0 h-20 z-10 transition-opacity duration-300 flex items-end justify-center pb-2"
+            className="pointer-events-none absolute bottom-0 left-0 right-0 h-20 z-10 transition-opacity duration-300 flex items-end justify-center pb-2"
             style={{
               background: "linear-gradient(to top, #141414 40%, transparent 100%)",
-              opacity: isAtBottom(mobileScrollProgress) ? 0 : 1,
-              pointerEvents: isAtBottom(mobileScrollProgress) ? "none" : "auto",
+              opacity: isAtBottom(mobileProgress) ? 0 : 1,
             }}
           >
             <button
               onClick={() => mobileDetailsRef.current?.scrollBy({ top: 120, behavior: "smooth" })}
-              className="flex items-center gap-1.5 text-[#C8A028] text-xs tracking-[0.2em] uppercase"
+              tabIndex={isAtBottom(mobileProgress) ? -1 : 0}
+              className={`flex items-center gap-1.5 text-[#C8A028] text-xs tracking-[0.2em] uppercase ${isAtBottom(mobileProgress) ? "" : "pointer-events-auto"}`}
             >
               Více o produktu
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
@@ -176,9 +206,7 @@ export default function ProductModal({ product, onClose }: Props) {
           </div>
         <div
           ref={mobileDetailsRef}
-          onScroll={() => {
-            if (mobileDetailsRef.current) setMobileScrollProgress(calcProgress(mobileDetailsRef.current));
-          }}
+          onScroll={updateMobileProgress}
           className="overflow-y-auto flex-1 p-6 flex flex-col gap-4 pr-5"
         >
           <p className="text-[#C8A028] text-sm tracking-[0.3em] uppercase">
@@ -239,11 +267,14 @@ export default function ProductModal({ product, onClose }: Props) {
         {/* CTA — always visible at bottom */}
         <div className="flex-shrink-0 p-6 pt-4 flex flex-col gap-3 border-t border-white/8">
           <button
-            onClick={handleEnquire}
+            onClick={() => setOrderOpen(true)}
             className="inline-flex items-center justify-center px-6 py-4 bg-[#C8A028] text-[#0A0A0A] text-sm tracking-[0.15em] uppercase font-medium hover:bg-[#D4AF40] transition-colors duration-200 text-center"
           >
-            Nezávazně poptat tento styl
+            Objednat
           </button>
+          <p className="text-center text-xs text-[#888580] leading-relaxed">
+            Nic neplatíte online — zavoláme a vše domluvíme.
+          </p>
           <button
             onClick={onClose}
             className="inline-flex items-center justify-center px-6 py-4 border border-white/20 text-[#F0EDE8] text-sm tracking-[0.15em] uppercase hover:border-white/40 transition-colors duration-200"
@@ -303,21 +334,21 @@ export default function ProductModal({ product, onClose }: Props) {
             <div className="absolute right-0 top-0 bottom-0 w-[2px] bg-white/8 z-10">
               <div
                 className="w-full bg-[#C8A028] transition-all duration-100"
-                style={{ height: `${desktopScrollProgress * 100}%` }}
+                style={{ height: `${desktopProgress * 100}%` }}
               />
             </div>
             {/* Bottom fade + scroll hint */}
             <div
-              className="absolute bottom-0 left-0 right-0 h-20 z-10 transition-opacity duration-300 flex items-end justify-center pb-2"
+              className="pointer-events-none absolute bottom-0 left-0 right-0 h-20 z-10 transition-opacity duration-300 flex items-end justify-center pb-2"
               style={{
                 background: "linear-gradient(to top, #141414 40%, transparent 100%)",
-                opacity: isAtBottom(desktopScrollProgress) ? 0 : 1,
-                pointerEvents: isAtBottom(desktopScrollProgress) ? "none" : "auto",
+                opacity: isAtBottom(desktopProgress) ? 0 : 1,
               }}
             >
               <button
                 onClick={() => desktopDetailsRef.current?.scrollBy({ top: 120, behavior: "smooth" })}
-                className="flex items-center gap-1.5 text-[#C8A028] text-xs tracking-[0.2em] uppercase"
+                tabIndex={isAtBottom(desktopProgress) ? -1 : 0}
+                className={`flex items-center gap-1.5 text-[#C8A028] text-xs tracking-[0.2em] uppercase ${isAtBottom(desktopProgress) ? "" : "pointer-events-auto"}`}
               >
                 Více o produktu
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
@@ -327,9 +358,7 @@ export default function ProductModal({ product, onClose }: Props) {
             </div>
           <div
             ref={desktopDetailsRef}
-            onScroll={() => {
-              if (desktopDetailsRef.current) setDesktopScrollProgress(calcProgress(desktopDetailsRef.current));
-            }}
+            onScroll={updateDesktopProgress}
             className="overflow-y-auto flex-1 p-8 xl:p-10 flex flex-col gap-5"
           >
             <p className="text-[#C8A028] text-sm tracking-[0.3em] uppercase">
@@ -409,11 +438,14 @@ export default function ProductModal({ product, onClose }: Props) {
           {/* CTA — always visible at bottom */}
           <div className="flex-shrink-0 p-8 xl:p-10 pt-4 flex flex-col gap-3 border-t border-white/8">
             <button
-              onClick={handleEnquire}
+              onClick={() => setOrderOpen(true)}
               className="inline-flex items-center justify-center px-6 py-4 bg-[#C8A028] text-[#0A0A0A] text-sm tracking-[0.15em] uppercase font-medium hover:bg-[#D4AF40] transition-colors duration-200 text-center"
             >
-              Nezávazně poptat tento styl
+              Objednat
             </button>
+            <p className="text-center text-xs text-[#888580] leading-relaxed">
+              Nic neplatíte online — zavoláme a vše domluvíme.
+            </p>
             <button
               onClick={onClose}
               className="inline-flex items-center justify-center px-6 py-4 border border-white/20 text-[#F0EDE8] text-sm tracking-[0.15em] uppercase hover:border-white/40 transition-colors duration-200"
@@ -423,6 +455,13 @@ export default function ProductModal({ product, onClose }: Props) {
           </div>
         </div>
       </div>
+
+      <OrderForm
+        product={product}
+        open={orderOpen}
+        onClose={closeOrder}
+        onDone={onClose}
+      />
     </div>
   );
 }

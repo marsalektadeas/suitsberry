@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { ENQUIRY_EVENT, type EnquiryDetail } from "@/lib/enquiry";
+import { useState } from "react";
 
 type FormState = {
   name: string;
@@ -23,21 +22,6 @@ export default function Contact() {
   });
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
-
-  // Prefill zprávy, když uživatel klikne „Nezávazně poptat" u konkrétního obleku
-  useEffect(() => {
-    const handler = (e: Event) => {
-      const { productName, productColor } = (e as CustomEvent<EnquiryDetail>).detail;
-      const colorPart = productColor ? ` (${productColor})` : "";
-      setStatus("idle");
-      setForm((prev) => ({
-        ...prev,
-        message: `Mám zájem o styl ${productName}${colorPart}. Rád bych domluvil nezávaznou konzultaci.`,
-      }));
-    };
-    window.addEventListener(ENQUIRY_EVENT, handler);
-    return () => window.removeEventListener(ENQUIRY_EVENT, handler);
-  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<

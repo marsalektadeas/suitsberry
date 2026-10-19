@@ -43,7 +43,7 @@ Products live in Vercel Blob as a single JSON document, managed through the admi
 - Photos are downscaled in the browser first (`lib/image-resize.ts`, 1600 px / JPEG q82 → typically under 400 KB), then POSTed as `multipart/form-data` to `/api/admin/upload`, which validates type and size server-side and calls `put()`. Client-side direct upload was rejected on purpose: `generateClientTokenFromReadWriteToken` uses the read-write token as its HMAC signing key, so it would force a long-lived `BLOB_READ_WRITE_TOKEN` even where OIDC would otherwise do. Vercel's 4.5 MB request body cap is not a problem because only the already-resized image is ever sent.
 - Deleting a product or removing a photo does **not** delete blobs. Orphaned images accumulate; both confirmation dialogs say so.
 
-Required env vars: `BLOB_READ_WRITE_TOKEN` (added by Vercel when the Blob store is connected), `ADMIN_PASSWORD`, `ADMIN_SESSION_SECRET`.
+Required env vars: `DATABASE_URL` (Neon integration), `BLOB_READ_WRITE_TOKEN` (added by Vercel when the Blob store is connected), `ADMIN_PASSWORD`, `ADMIN_SESSION_SECRET`.
 
 ### Component flow
 `app/page.tsx` → assembles all section components linearly in page order.
@@ -71,8 +71,14 @@ img.crop(bbox).save("output.jpg")
 ```
 After replacing image files, clear `.next/cache/images` and restart the dev server.
 
-### Contact form
-`app/api/contact/route.ts` is a mock POST handler — logs to console, returns JSON. Ready to connect to Resend/SendGrid or CRM. No external services configured yet.
+### Leads / CRM (orders + contact form)
+No payment gateway on purpose — a customer leaves contact details, we call back and agree size, price and delivery.
+- "Objednat" in `ProductModal` opens `OrderForm` (kept mounted while hidden so typed data survives closing). POST `/api/orders`.
+- Contact form posts to `/api/contact`. Both routes validate with `lib/lead-schema.ts` (zod, shared with the client), check the `hp_field` honeypot, rate-limit via `lib/rate-limit.ts` (in-memory, per instance), save to Postgres **and** e-mail via Resend (`lib/lead-notify.ts`, escapes HTML). Success if at least one of the two succeeds, so a lead is never lost.
+- Data: Neon Postgres (Vercel Marketplace, resource `suitsberry-crm`, fra1), table `leads` in `db/schema.sql`. Apply with `npm run db:migrate` (idempotent). Access layer `lib/leads-store.ts` (`DATABASE_URL`).
+- Admin `/admin/poptavky` (`components/admin/LeadList.tsx`): filter by status, call/mail links, status + internal note, delete. PATCH/DELETE `/api/admin/leads/[id]`.
+- Optimistic lock on `updated_at`, compared with `date_trunc('milliseconds', …)` — Postgres keeps microseconds, JS `Date` only milliseconds, so exact comparison always fails.
+- Dev and production share the same database — delete test leads.
 
 ### Deploy
 Git → GitHub (`marsalektadeas/suitsberry`) → Vercel auto-deploy on push to `main`. Project is linked via `.vercel/project.json`. For manual production deploy: `vercel --prod`.
