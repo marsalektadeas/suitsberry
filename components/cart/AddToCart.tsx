@@ -3,7 +3,6 @@
 import { useId, useState } from "react";
 
 import type { Product } from "@/data/products";
-import { formatCzk } from "@/lib/price";
 import { parseSizes } from "@/lib/product-sizes";
 import { useCart } from "./CartProvider";
 
@@ -13,6 +12,9 @@ type Props = {
   onShowCart: () => void;
   onEnquire: () => void;
 };
+
+const primaryButtonClass =
+  "inline-flex items-center justify-center h-12 px-4 bg-[#C8A028] text-[#0A0A0A] text-sm tracking-[0.15em] uppercase font-medium hover:bg-[#D4AF40] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C8A028] transition-colors duration-200";
 
 const selectClass =
   "w-full h-12 bg-[#141414] border px-3 text-[#F0EDE8] text-base focus:outline-none focus:border-[#C8A028] transition-colors duration-200";
@@ -38,25 +40,26 @@ export default function AddToCart({ product, onShowCart, onEnquire }: Props) {
 
   return (
     <div className="flex flex-col gap-3">
+      {product.colors.length > 1 && (
+        <div>
+          <label htmlFor={`${id}-color`} className="sr-only">Barva</label>
+          <select
+            id={`${id}-color`}
+            value={color ?? ""}
+            onChange={(event) => setColor(event.target.value)}
+            className={`${selectClass} border-white/15`}
+          >
+            {product.colors.map((option) => (
+              <option key={option.name} value={option.name}>
+                {option.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
       <div className="flex gap-3">
-        {product.colors.length > 1 && (
-          <div className="flex-1 min-w-0">
-            <label htmlFor={`${id}-color`} className="sr-only">Barva</label>
-            <select
-              id={`${id}-color`}
-              value={color ?? ""}
-              onChange={(event) => setColor(event.target.value)}
-              className={`${selectClass} border-white/15`}
-            >
-              {product.colors.map((option) => (
-                <option key={option.name} value={option.name}>
-                  {option.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
-        <div className="flex-1 min-w-0">
+        <div className="w-28 flex-shrink-0">
           <label htmlFor={`${id}-size`} className="sr-only">Velikost</label>
           <select
             id={`${id}-size`}
@@ -80,11 +83,15 @@ export default function AddToCart({ product, onShowCart, onEnquire }: Props) {
             ))}
           </select>
         </div>
-        <p className="flex-shrink-0 self-center text-[#F0EDE8] text-lg whitespace-nowrap">
-          {product.priceCzk ? formatCzk(product.priceCzk) : (
-            <span className="text-sm text-[#A09C97]">Cena na dotaz</span>
-          )}
-        </p>
+        {addedLabel ? (
+          <button type="button" onClick={onShowCart} className={`flex-1 ${primaryButtonClass}`}>
+            Zobrazit košík
+          </button>
+        ) : (
+          <button type="button" onClick={handleAdd} className={`flex-1 ${primaryButtonClass}`}>
+            Přidat do košíku
+          </button>
+        )}
       </div>
       {sizeError && (
         <p id={`${id}-size-error`} className="-mt-1 text-sm text-red-400">
@@ -92,27 +99,10 @@ export default function AddToCart({ product, onShowCart, onEnquire }: Props) {
         </p>
       )}
 
-      {addedLabel ? (
-        <div role="status" className="flex flex-col gap-2">
-          <p className="text-sm text-[#A09C97] text-center">
-            <span className="text-[#C8A028]">✓</span> {addedLabel} je v košíku.
-          </p>
-          <button
-            type="button"
-            onClick={onShowCart}
-            className="inline-flex items-center justify-center px-6 py-4 bg-[#C8A028] text-[#0A0A0A] text-sm tracking-[0.15em] uppercase font-medium hover:bg-[#D4AF40] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C8A028] transition-colors duration-200"
-          >
-            Zobrazit košík
-          </button>
-        </div>
-      ) : (
-        <button
-          type="button"
-          onClick={handleAdd}
-          className="inline-flex items-center justify-center px-6 py-4 bg-[#C8A028] text-[#0A0A0A] text-sm tracking-[0.15em] uppercase font-medium hover:bg-[#D4AF40] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C8A028] transition-colors duration-200"
-        >
-          Přidat do košíku
-        </button>
+      {addedLabel && (
+        <p role="status" className="-mt-1 text-sm text-[#A09C97]">
+          <span className="text-[#C8A028]">✓</span> {addedLabel} je v košíku.
+        </p>
       )}
 
       <p className="text-center text-xs text-[#888580] leading-relaxed">

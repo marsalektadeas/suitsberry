@@ -1,9 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useEffectEvent, useState, useRef } from "react";
 import Image from "next/image";
 import type { Product } from "@/data/products";
 import { requestEnquiry } from "@/lib/enquiry";
+import { formatCzk } from "@/lib/price";
 import AddToCart from "./cart/AddToCart";
 import { useCart } from "./cart/CartProvider";
 
@@ -87,20 +88,33 @@ export default function ProductModal({ product, onClose }: Props) {
     };
   }, []);
 
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
-
   const scrollToImage = (index: number) => {
     const el = carouselRef.current;
     if (!el) return;
     el.scrollTo({ left: index * el.offsetWidth, behavior: "smooth" });
     setActiveImage(index);
   };
+
+  const imageCount = product.images.length;
+
+  /** Posun o fotku vpřed/vzad, za poslední pokračuje první. Obsluhuje desktop i mobilní karusel. */
+  const stepImage = (direction: 1 | -1) => {
+    scrollToImage((activeImage + direction + imageCount) % imageCount);
+  };
+
+  const onKey = useEffectEvent((e: KeyboardEvent) => {
+    if (e.key === "Escape") onClose();
+    // Šipky ve výběru velikosti mění hodnotu, galerii nechat být.
+    if (e.target instanceof HTMLSelectElement || e.target instanceof HTMLInputElement) return;
+    if (imageCount < 2) return;
+    if (e.key === "ArrowLeft") stepImage(-1);
+    if (e.key === "ArrowRight") stepImage(1);
+  });
+
+  useEffect(() => {
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   const onCarouselScroll = () => {
     const el = carouselRef.current;
@@ -169,6 +183,8 @@ export default function ProductModal({ product, onClose }: Props) {
             ))}
           </div>
 
+          {imageCount > 1 && <GalleryArrows onStep={stepImage} />}
+
           {/* Dot indicators */}
           {product.images.length > 1 && (
             <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-2">
@@ -218,7 +234,7 @@ export default function ProductModal({ product, onClose }: Props) {
         <div
           ref={mobileDetailsRef}
           onScroll={updateMobileProgress}
-          className="overflow-y-auto flex-1 p-6 flex flex-col gap-4 pr-5"
+          className="scrollbar-hide overflow-y-auto flex-1 p-6 flex flex-col gap-4 pr-5"
         >
           <p className="text-[#C8A028] text-sm tracking-[0.3em] uppercase">
             {product.category}
@@ -229,6 +245,7 @@ export default function ProductModal({ product, onClose }: Props) {
           >
             {product.name}
           </h2>
+          <ProductPrice priceCzk={product.priceCzk} />
           <p className="text-[#A09C97] leading-relaxed text-sm">
             {product.description}
           </p>
@@ -282,18 +299,19 @@ export default function ProductModal({ product, onClose }: Props) {
       </div>
 
       {/* ── DESKTOP modal (centered, max height) ── */}
-      <div className="hidden md:flex relative z-10 w-full max-w-5xl bg-[#141414] overflow-hidden max-h-[88vh]">
-        {/* Left — images (65%) */}
-        <div className="w-[65%] flex-shrink-0 flex flex-col min-h-0">
+      <div className="hidden md:flex relative z-10 w-full max-w-6xl bg-[#141414] overflow-hidden max-h-[88vh]">
+        {/* Left — images (58%) */}
+        <div className="w-[58%] flex-shrink-0 flex flex-col min-h-0">
           <div className="relative flex-1 min-h-0 bg-[#0A0A0A]">
             <Image
               src={product.images[activeImage] ?? product.heroImage}
               alt={product.name}
               fill
               className="object-contain"
-              sizes="65vw"
+              sizes="58vw"
               priority
             />
+            {imageCount > 1 && <GalleryArrows onStep={stepImage} />}
           </div>
 
           {/* Thumbnails */}
@@ -323,8 +341,8 @@ export default function ProductModal({ product, onClose }: Props) {
           )}
         </div>
 
-        {/* Right — details (35%) */}
-        <div className="w-[35%] flex flex-col overflow-hidden">
+        {/* Right — details (42%) */}
+        <div className="w-[42%] flex flex-col overflow-hidden">
           {/* Scrollable content */}
           <div className="relative flex-1 min-h-0 flex">
             {/* Scroll progress bar */}
@@ -356,7 +374,7 @@ export default function ProductModal({ product, onClose }: Props) {
           <div
             ref={desktopDetailsRef}
             onScroll={updateDesktopProgress}
-            className="overflow-y-auto flex-1 p-8 xl:p-10 flex flex-col gap-5"
+            className="scrollbar-hide overflow-y-auto flex-1 p-8 xl:p-10 flex flex-col gap-5"
           >
             <p className="text-[#C8A028] text-sm tracking-[0.3em] uppercase">
               {product.category}
@@ -367,6 +385,7 @@ export default function ProductModal({ product, onClose }: Props) {
             >
               {product.name}
             </h2>
+            <ProductPrice priceCzk={product.priceCzk} />
             <p className="text-[#A09C97] leading-relaxed text-base">
               {product.description}
             </p>
@@ -440,5 +459,44 @@ export default function ProductModal({ product, onClose }: Props) {
       </div>
 
     </div>
+  );
+}
+
+const arrowClass =
+  "absolute top-1/2 -translate-y-1/2 z-10 flex items-center justify-center w-10 h-10 rounded-full bg-[#0A0A0A]/80 border border-[#C8A028]/40 text-[#C8A028] hover:border-[#C8A028] hover:bg-[#0A0A0A] focus-visible:outline-none focus-visible:border-[#C8A028] focus-visible:ring-1 focus-visible:ring-[#C8A028] transition-colors duration-200";
+
+/** Šipky přes fotku — stejný vzhled jako šipky karuselu v kolekci. */
+function GalleryArrows({ onStep }: { onStep: (direction: 1 | -1) => void }) {
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => onStep(-1)}
+        aria-label="Předchozí fotka"
+        className={`${arrowClass} left-3`}
+      >
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+      <button
+        type="button"
+        onClick={() => onStep(1)}
+        aria-label="Další fotka"
+        className={`${arrowClass} right-3`}
+      >
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+    </>
+  );
+}
+
+function ProductPrice({ priceCzk }: { priceCzk?: number }) {
+  return priceCzk ? (
+    <p className="-mt-2 text-xl text-[#F0EDE8]">{formatCzk(priceCzk)}</p>
+  ) : (
+    <p className="-mt-2 text-sm tracking-[0.15em] uppercase text-[#A09C97]">Cena na dotaz</p>
   );
 }
