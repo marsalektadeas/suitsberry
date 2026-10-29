@@ -2,7 +2,7 @@ import "server-only";
 
 import { neon } from "@neondatabase/serverless";
 
-import type { Lead, LeadSource, LeadStatus, LeadUpdate } from "./lead-schema";
+import type { Lead, LeadItem, LeadSource, LeadStatus, LeadUpdate } from "./lead-schema";
 
 export class DatabaseNotConfiguredError extends Error {
   constructor() {
@@ -38,6 +38,8 @@ function db() {
 
 type LeadRow = {
   id: string;
+  /** Neon vrací bigint jako text, aby neztratil přesnost. */
+  number: string;
   created_at: Date;
   updated_at: Date;
   source: LeadSource;
@@ -45,10 +47,7 @@ type LeadRow = {
   name: string;
   phone: string | null;
   email: string | null;
-  product_id: string | null;
-  product_name: string | null;
-  color: string | null;
-  size: string | null;
+  items: LeadItem[];
   message: string | null;
   internal_note: string;
 };
@@ -56,6 +55,7 @@ type LeadRow = {
 function toLead(row: LeadRow): Lead {
   return {
     id: row.id,
+    number: Number(row.number),
     createdAt: new Date(row.created_at).toISOString(),
     updatedAt: new Date(row.updated_at).toISOString(),
     source: row.source,
@@ -63,10 +63,7 @@ function toLead(row: LeadRow): Lead {
     name: row.name,
     phone: row.phone,
     email: row.email,
-    productId: row.product_id,
-    productName: row.product_name,
-    color: row.color,
-    size: row.size,
+    items: row.items,
     message: row.message,
     internalNote: row.internal_note,
   };
@@ -77,20 +74,16 @@ export type NewLead = {
   name: string;
   phone?: string;
   email?: string;
-  productId?: string;
-  productName?: string;
-  color?: string;
-  size?: string;
+  items?: LeadItem[];
   message?: string;
 };
 
 export async function createLead(lead: NewLead): Promise<Lead> {
   const rows = (await db()`
-    insert into leads (source, name, phone, email, product_id, product_name, color, size, message)
+    insert into leads (source, name, phone, email, items, message)
     values (
       ${lead.source}, ${lead.name}, ${lead.phone ?? null}, ${lead.email ?? null},
-      ${lead.productId ?? null}, ${lead.productName ?? null}, ${lead.color ?? null},
-      ${lead.size ?? null}, ${lead.message ?? null}
+      ${JSON.stringify(lead.items ?? [])}::jsonb, ${lead.message ?? null}
     )
     returning *
   `) as LeadRow[];
@@ -103,6 +96,14 @@ export async function listLeads(): Promise<Lead[]> {
     select * from leads order by created_at desc limit 1000
   `) as LeadRow[];
   return rows.map(toLead);
+}
+
+export async function findLeadSource(id: string): Promise<LeadSource> {
+  const rows = (await db()`select source from leads where id = ${id}`) as {
+    source: LeadSource;
+  }[];
+  if (!rows[0]) throw new LeadNotFoundError();
+  return rows[0].source;
 }
 
 export async function countNewLeads(): Promise<number> {

@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import { isAdminAuthenticated, unauthorizedResponse } from "@/lib/admin-session";
-import { leadUpdateSchema } from "@/lib/lead-schema";
+import { isStatusAllowed, leadUpdateSchema } from "@/lib/lead-schema";
 import {
   DatabaseNotConfiguredError,
   deleteLead,
+  findLeadSource,
   LeadNotFoundError,
   StaleLeadError,
   updateLead,
@@ -65,6 +66,13 @@ export async function PATCH(request: NextRequest, { params }: Context) {
   }
 
   try {
+    const source = await findLeadSource(id.data);
+    if (!isStatusAllowed(source, parsed.data.status)) {
+      return NextResponse.json(
+        { error: "Tenhle stav k tomuto typu záznamu nepatří." },
+        { status: 422 },
+      );
+    }
     return NextResponse.json({ lead: await updateLead(id.data, parsed.data) });
   } catch (error) {
     return errorResponse(error, "PATCH");

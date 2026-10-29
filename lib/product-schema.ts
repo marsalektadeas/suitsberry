@@ -58,6 +58,12 @@ export const productSchema = z
     occasion: z.string().trim().min(1, "Příležitost je povinná.").max(80),
     specs: specsSchema,
     colors: z.array(colorSchema).max(6, "Maximálně 6 barev."),
+    priceCzk: z
+      .number("Cena musí být číslo.")
+      .int("Cenu zadejte v celých korunách.")
+      .positive("Cena musí být kladná.")
+      .max(1_000_000, "Cena je nereálně vysoká.")
+      .optional(),
     hidden: z.boolean().optional(),
   })
   .refine((product) => product.images.includes(product.heroImage), {

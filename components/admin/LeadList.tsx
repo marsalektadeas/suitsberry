@@ -6,17 +6,33 @@ import ConfirmDialog from "@/components/admin/ConfirmDialog";
 import { removeLead, saveLead } from "@/lib/admin-client";
 import {
   CLOSED_STATUSES,
-  LEAD_SOURCE_LABELS,
-  LEAD_STATUS_LABELS,
-  LEAD_STATUSES,
+  formatOrderNumber,
+  STATUS_OPTIONS,
+  statusLabel,
+  sumItems,
   type Lead,
+  type LeadSource,
   type LeadStatus,
 } from "@/lib/lead-schema";
 import { withCount } from "@/lib/plural";
+import { formatCzk } from "@/lib/price";
 
 const SEARCH_THRESHOLD = 8;
 
 type Filter = "active" | "all" | LeadStatus;
+
+const TABS: { source: LeadSource; label: string; empty: string }[] = [
+  {
+    source: "order",
+    label: "Nákupy",
+    empty: "Jakmile někdo na webu odešle košík, objeví se tady ke schválení a zároveň vám přijde e-mail.",
+  },
+  {
+    source: "contact",
+    label: "Poptávky",
+    empty: "Sem padají zprávy z kontaktního formuláře. Zároveň vám vždy přijde e-mail.",
+  },
+];
 
 const dateFormat = new Intl.DateTimeFormat("cs-CZ", {
   day: "numeric",
@@ -38,20 +54,28 @@ function matchesFilter(lead: Lead, filter: Filter): boolean {
 
 export default function LeadList({ initialLeads }: { initialLeads: Lead[] }) {
   const [leads, setLeads] = useState(initialLeads);
+  const [source, setSource] = useState<LeadSource>("order");
   const [filter, setFilter] = useState<Filter>("active");
   const [query, setQuery] = useState("");
   const [pendingDelete, setPendingDelete] = useState<Lead | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const newCount = leads.filter((lead) => lead.status === "new").length;
+  const tab = TABS.find((candidate) => candidate.source === source) ?? TABS[0];
+  const tabLeads = leads.filter((lead) => lead.source === source);
   const normalizedQuery = query.trim().toLowerCase();
 
-  const visibleLeads = leads.filter(
+  const visibleLeads = tabLeads.filter(
     (lead) =>
       matchesFilter(lead, filter) &&
       (!normalizedQuery ||
-        [lead.name, lead.phone, lead.email, lead.productName]
+        [
+          lead.name,
+          lead.phone,
+          lead.email,
+          formatOrderNumber(lead.number),
+          ...lead.items.map((item) => item.productName),
+        ]
           .join(" ")
           .toLowerCase()
           .includes(normalizedQuery)),
@@ -59,12 +83,15 @@ export default function LeadList({ initialLeads }: { initialLeads: Lead[] }) {
 
   const filters: { value: Filter; label: string }[] = [
     { value: "active", label: "Rozpracované" },
-    ...LEAD_STATUSES.map((status) => ({
-      value: status,
-      label: LEAD_STATUS_LABELS[status],
-    })),
+    ...STATUS_OPTIONS[source],
     { value: "all", label: "Vše" },
   ];
+
+  function switchTab(next: LeadSource) {
+    setSource(next);
+    setFilter("active");
+    setQuery("");
+  }
 
   function replaceLead(updated: Lead) {
     setLeads((prev) => prev.map((lead) => (lead.id === updated.id ? updated : lead)));
@@ -92,15 +119,44 @@ export default function LeadList({ initialLeads }: { initialLeads: Lead[] }) {
           className="text-4xl font-light text-[#F0EDE8]"
           style={{ fontFamily: "Cormorant Garamond, Georgia, serif" }}
         >
-          Poptávky
+          Objednávky
         </h1>
         <p className="mt-1 text-sm text-[#888580]">
-          {leads.length === 0
-            ? "Zatím žádná poptávka"
-            : withCount(leads.length, ["poptávka", "poptávky", "poptávek"])}
-          {newCount > 0 &&
-            `, z toho ${withCount(newCount, ["nová", "nové", "nových"])}`}
+          Nákupy z košíku čekají na schválení, poptávky jsou zprávy z kontaktního formuláře.
         </p>
+      </div>
+
+      <div className="mt-8 flex gap-6 border-b border-white/8" role="tablist" aria-label="Typ záznamu">
+        {TABS.map((candidate) => {
+          const isActive = candidate.source === source;
+          const newCount = leads.filter(
+            (lead) => lead.source === candidate.source && lead.status === "new",
+          ).length;
+          return (
+            <button
+              key={candidate.source}
+              type="button"
+              role="tab"
+              aria-selected={isActive}
+              onClick={() => switchTab(candidate.source)}
+              className={`-mb-px inline-flex items-center gap-2 border-b-2 pb-3 text-base transition-colors duration-200 ${focusRing} ${
+                isActive
+                  ? "border-[#C8A028] text-[#F0EDE8]"
+                  : "border-transparent text-[#888580] hover:text-[#F0EDE8]"
+              }`}
+            >
+              {candidate.label}
+              {newCount > 0 && (
+                <span
+                  className="min-w-5 rounded-full bg-[#C8A028] px-1.5 text-center text-xs font-medium leading-5 text-[#0A0A0A]"
+                  aria-label={withCount(newCount, ["nová", "nové", "nových"])}
+                >
+                  {newCount}
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
 
       {error && (
@@ -112,19 +168,18 @@ export default function LeadList({ initialLeads }: { initialLeads: Lead[] }) {
         </div>
       )}
 
-      {leads.length === 0 ? (
+      {tabLeads.length === 0 ? (
         <div className="mt-10 rounded-sm border border-dashed border-white/15 px-6 py-14 text-center">
           <p className="text-lg text-[#F0EDE8]">Zatím tu nic není.</p>
           <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-[#888580]">
-            Jakmile někdo na webu klikne na „Objednat“ u obleku nebo pošle zprávu
-            z kontaktního formuláře, objeví se tady a zároveň vám přijde e-mail.
+            {tab.empty}
           </p>
         </div>
       ) : (
         <>
           <div className="mt-8 flex flex-wrap gap-2" role="group" aria-label="Filtr podle stavu">
             {filters.map(({ value, label }) => {
-              const count = leads.filter((lead) => matchesFilter(lead, value)).length;
+              const count = tabLeads.filter((lead) => matchesFilter(lead, value)).length;
               const isActive = filter === value;
               return (
                 <button
@@ -144,17 +199,17 @@ export default function LeadList({ initialLeads }: { initialLeads: Lead[] }) {
             })}
           </div>
 
-          {leads.length > SEARCH_THRESHOLD && (
+          {tabLeads.length > SEARCH_THRESHOLD && (
             <div className="mt-4">
               <label htmlFor="lead-search" className="sr-only">
-                Hledat v poptávkách
+                Hledat v záznamech
               </label>
               <input
                 id="lead-search"
                 type="search"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="Hledat podle jména, telefonu nebo obleku…"
+                placeholder="Hledat podle jména, telefonu, čísla nebo obleku…"
                 className="h-10 w-full max-w-sm rounded-sm border border-white/10 bg-transparent px-3 text-sm text-[#F0EDE8] placeholder:text-[#666] focus-visible:border-[#C8A028] focus-visible:outline-none"
               />
             </div>
@@ -171,7 +226,7 @@ export default function LeadList({ initialLeads }: { initialLeads: Lead[] }) {
                 }}
                 className={`mt-3 text-[#C8A028] underline-offset-4 hover:underline ${focusRing}`}
               >
-                Zobrazit všechny poptávky
+                Zobrazit vše
               </button>
             </div>
           ) : (
@@ -191,16 +246,21 @@ export default function LeadList({ initialLeads }: { initialLeads: Lead[] }) {
 
       {pendingDelete && (
         <ConfirmDialog
-          title={`Smazat poptávku od ${pendingDelete.name}?`}
+          title={
+            pendingDelete.source === "order"
+              ? `Smazat nákup ${formatOrderNumber(pendingDelete.number)} od ${pendingDelete.name}?`
+              : `Smazat poptávku od ${pendingDelete.name}?`
+          }
           body={
             <>
-              Kontakt, zpráva i vaše poznámky zmizí natrvalo a nejde je vrátit.
-              Upozornění, které vám přišlo e-mailem, ve schránce zůstane. Pokud
-              jen nechcete poptávku vidět, nastavte jí raději stav „Dokončeno“
-              nebo „Zrušeno“.
+              Kontakt, {pendingDelete.source === "order" ? "položky" : "zpráva"} i vaše
+              poznámky zmizí natrvalo a nejde je vrátit. Upozornění, které vám přišlo
+              e-mailem, ve schránce zůstane. Pokud jen nechcete záznam vidět, nastavte
+              mu raději stav „{statusLabel(pendingDelete.source, "done")}“ nebo „
+              {statusLabel(pendingDelete.source, "cancelled")}“.
             </>
           }
-          confirmLabel="Smazat poptávku"
+          confirmLabel={pendingDelete.source === "order" ? "Smazat nákup" : "Smazat poptávku"}
           isBusy={isDeleting}
           onConfirm={confirmDelete}
           onCancel={() => setPendingDelete(null)}
@@ -223,10 +283,7 @@ function LeadCard({ lead, onSaved, onDelete }: LeadCardProps) {
   const [justSaved, setJustSaved] = useState(false);
 
   const isNoteDirty = note !== lead.internalNote;
-  const details = [
-    lead.color && `barva ${lead.color}`,
-    lead.size && `velikost ${lead.size}`,
-  ].filter(Boolean);
+  const { totalCzk, hasUnpricedItems } = sumItems(lead.items);
 
   async function save(status: LeadStatus, internalNote: string, kind: "status" | "note") {
     setBusy(kind);
@@ -256,12 +313,12 @@ function LeadCard({ lead, onSaved, onDelete }: LeadCardProps) {
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <h2 className="text-lg text-[#F0EDE8]">{lead.name}</h2>
-            <span className="rounded-sm border border-white/15 px-2 py-0.5 text-[0.65rem] uppercase tracking-[0.15em] text-[#888580]">
-              {LEAD_SOURCE_LABELS[lead.source]}
-            </span>
+            {lead.source === "order" && (
+              <span className="text-sm text-[#888580]">{formatOrderNumber(lead.number)}</span>
+            )}
             {lead.status === "new" && (
               <span className="rounded-sm bg-[#C8A028] px-2 py-0.5 text-[0.65rem] font-medium uppercase tracking-[0.15em] text-[#0A0A0A]">
-                Nová
+                {statusLabel(lead.source, "new")}
               </span>
             )}
           </div>
@@ -269,13 +326,32 @@ function LeadCard({ lead, onSaved, onDelete }: LeadCardProps) {
             <time dateTime={lead.createdAt}>{dateFormat.format(new Date(lead.createdAt))}</time>
           </p>
 
-          {lead.productName && (
-            <p className="mt-3 text-sm text-[#F0EDE8]">
-              <span className="text-[#C8A028]">{lead.productName}</span>
-              {details.length > 0 && (
-                <span className="text-[#A09C97]"> · {details.join(" · ")}</span>
+          {lead.items.length > 0 && (
+            <div className="mt-3 text-sm">
+              <ul className="space-y-1">
+                {lead.items.map((item, index) => (
+                  <li key={index} className="flex justify-between gap-4">
+                    <span className="text-[#F0EDE8]">
+                      {item.quantity}× <span className="text-[#C8A028]">{item.productName}</span>
+                      <span className="text-[#A09C97]">
+                        {" "}· {[item.color, `velikost ${item.size}`].filter(Boolean).join(" · ")}
+                      </span>
+                    </span>
+                    <span className="whitespace-nowrap text-[#A09C97]">
+                      {item.unitPriceCzk === null
+                        ? "na dotaz"
+                        : formatCzk(item.unitPriceCzk * item.quantity)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              {totalCzk > 0 && (
+                <p className="mt-2 flex justify-between gap-4 border-t border-white/8 pt-2 text-[#F0EDE8]">
+                  <span>Celkem{hasUnpricedItems && " (bez položek na dotaz)"}</span>
+                  <span className="whitespace-nowrap">{formatCzk(totalCzk)}</span>
+                </p>
               )}
-            </p>
+            </div>
           )}
 
           <div className="mt-4 flex flex-wrap gap-2">
@@ -321,9 +397,9 @@ function LeadCard({ lead, onSaved, onDelete }: LeadCardProps) {
               }
               className="h-10 w-full rounded-sm border border-white/10 bg-[#141414] px-3 text-sm text-[#F0EDE8] focus-visible:border-[#C8A028] focus-visible:outline-none disabled:opacity-50"
             >
-              {LEAD_STATUSES.map((status) => (
-                <option key={status} value={status}>
-                  {LEAD_STATUS_LABELS[status]}
+              {STATUS_OPTIONS[lead.source].map(({ value, label }) => (
+                <option key={value} value={value}>
+                  {label}
                 </option>
               ))}
             </select>
@@ -383,7 +459,7 @@ function LeadCard({ lead, onSaved, onDelete }: LeadCardProps) {
             disabled={busy !== null}
             className={`self-start text-sm text-[#888580] transition-colors duration-200 hover:text-[#E5847B] disabled:opacity-40 ${focusRing}`}
           >
-            Smazat poptávku
+            {lead.source === "order" ? "Smazat nákup" : "Smazat poptávku"}
           </button>
         </div>
       </div>

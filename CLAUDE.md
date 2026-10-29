@@ -17,7 +17,7 @@ rm -rf .next/cache/images
 
 ## Architecture
 
-**One-page marketing site** for Suitsberry (premium men's suits). No e-commerce — goal is lead generation via contact form.
+**One-page marketing site** for Suitsberry (premium men's suits). Goal is leads: a contact form plus a simple cart that submits an order for manual approval (no payment, no shipping online).
 
 ### Data layer
 Products live in Vercel Blob as a single JSON document, managed through the admin at `/admin`.
@@ -71,14 +71,18 @@ img.crop(bbox).save("output.jpg")
 ```
 After replacing image files, clear `.next/cache/images` and restart the dev server.
 
-### Leads / CRM (orders + contact form)
-No payment gateway on purpose — a customer leaves contact details, we call back and agree size, price and delivery.
-- "Objednat" in `ProductModal` opens `OrderForm` (kept mounted while hidden so typed data survives closing). POST `/api/orders`.
-- Contact form posts to `/api/contact`. Both routes validate with `lib/lead-schema.ts` (zod, shared with the client), check the `hp_field` honeypot, rate-limit via `lib/rate-limit.ts` (in-memory, per instance), save to Postgres **and** e-mail via Resend (`lib/lead-notify.ts`, escapes HTML). Success if at least one of the two succeeds, so a lead is never lost.
-- Data: Neon Postgres (Vercel Marketplace, resource `suitsberry-crm`, fra1), table `leads` in `db/schema.sql`. Apply with `npm run db:migrate` (idempotent). Access layer `lib/leads-store.ts` (`DATABASE_URL`).
-- Admin `/admin/poptavky` (`components/admin/LeadList.tsx`): filter by status, call/mail links, status + internal note, delete. PATCH/DELETE `/api/admin/leads/[id]`.
+### Cart, orders and enquiries (CRM)
+No payment gateway and no shipping on purpose — the customer submits a cart with contact details, we approve it, call back and agree payment and delivery individually.
+- **Cart** lives only in the browser: `lib/cart.ts` (localStorage store for `useSyncExternalStore`, stores only productId/color/size/quantity). `components/cart/CartProvider.tsx` (mounted in `app/page.tsx`) resolves lines against the current visible products, so names and prices are never stale; lines for removed products disappear.
+- `ProductModal` → `AddToCart` (size required, sizes parsed from `specs.velikosti` by `lib/product-sizes.ts`: range „46 – 66“ in steps of 2, or list „48, 50“) → `CartDrawer` (cart → `CheckoutForm` → success). „Nebo jen nezávazně poptat“ prefills the contact form via `lib/enquiry.ts`.
+- `priceCzk` on a product is optional; without it the web shows „Cena na dotaz“.
+- POST `/api/orders` validates with `lib/lead-schema.ts`, then **re-resolves every item on the server** (product visible, color/size exist, name + price taken from the collection, never from the client). Saves to Postgres **and** e-mails us (`lib/lead-notify.ts`); success if at least one works. Customer confirmation e-mail is sent only when `ORDER_CONFIRMATION_FROM` is set to a sender on a verified Resend domain — the `onboarding@resend.dev` test sender only delivers to the account owner.
+- Contact form posts to `/api/contact` (source `contact`). Both routes check the `hp_field` honeypot and rate-limit via `lib/rate-limit.ts` (in-memory, per instance).
+- Data: Neon Postgres (Vercel Marketplace, resource `suitsberry-crm`, fra1), table `leads` in `db/schema.sql` — `source` `order`/`contact`, `items` jsonb snapshot, `number` identity shown as „SB-1001“. Apply with `npm run db:migrate` (idempotent). Access layer `lib/leads-store.ts` (`DATABASE_URL`).
+- Statuses differ per source (`STATUS_OPTIONS` in `lib/lead-schema.ts`, mirrored by the `leads_status_check` constraint): order = Ke schválení → Schváleno → Zaplaceno → Odesláno → Dokončeno / Zamítnuto; enquiry = Nová → Kontaktováno → Vyřízeno / Zrušeno. PATCH route rejects a status that doesn't belong to the record's source.
+- Admin `/admin/poptavky` (`components/admin/LeadList.tsx`): tabs Nákupy / Poptávky, status filter, call/mail links, items with total, status + internal note, delete.
 - Optimistic lock on `updated_at`, compared with `date_trunc('milliseconds', …)` — Postgres keeps microseconds, JS `Date` only milliseconds, so exact comparison always fails.
-- Dev and production share the same database — delete test leads.
+- Dev and production share the same database — delete test orders.
 
 ### Deploy
 Git → GitHub (`marsalektadeas/suitsberry`) → Vercel auto-deploy on push to `main`. Project is linked via `.vercel/project.json`. For manual production deploy: `vercel --prod`.

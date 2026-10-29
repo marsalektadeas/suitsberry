@@ -53,7 +53,7 @@ export default function AdminHeader({ newLeadCount }: { newLeadCount: number }) 
             aria-current={isLeads ? "page" : undefined}
             className={`${navLinkClass} inline-flex items-center gap-1.5 ${isLeads ? "text-[#C8A028]" : "text-[#A09C97] hover:text-[#C8A028]"}`}
           >
-            Poptávky
+            Objednávky
             {newLeadCount > 0 && (
               <span
                 className="min-w-5 rounded-full bg-[#C8A028] px-1.5 text-center text-xs font-medium leading-5 text-[#0A0A0A]"

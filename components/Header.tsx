@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import CartButton from "./cart/CartButton";
 
 const navLinks = [
   { label: "O nás", href: "#o-nas", id: "o-nas" },
@@ -80,24 +81,28 @@ export default function Header() {
           ))}
         </nav>
 
-        {/* CTA */}
-        <a
-          href="#kontakt"
-          className="hidden md:inline-flex items-center px-5 py-2.5 bg-[#C8A028] text-[#0A0A0A] text-sm tracking-[0.15em] uppercase font-medium hover:bg-[#D4AF40] transition-colors duration-200"
-        >
-          Nezávazně poptat
-        </a>
+        <div className="flex items-center gap-3 md:gap-5">
+          <CartButton />
 
-        {/* Mobile menu button */}
-        <button
-          className="md:hidden flex flex-col gap-1.5 p-2"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Otevřít menu"
-        >
-          <span className={`block w-6 h-px bg-white transition-transform duration-200 ${menuOpen ? "translate-y-[7px] rotate-45" : ""}`} />
-          <span className={`block w-6 h-px bg-white transition-opacity duration-200 ${menuOpen ? "opacity-0" : ""}`} />
-          <span className={`block w-6 h-px bg-white transition-transform duration-200 ${menuOpen ? "-translate-y-[7px] -rotate-45" : ""}`} />
-        </button>
+          {/* CTA */}
+          <a
+            href="#kontakt"
+            className="hidden md:inline-flex items-center px-5 py-2.5 bg-[#C8A028] text-[#0A0A0A] text-sm tracking-[0.15em] uppercase font-medium hover:bg-[#D4AF40] transition-colors duration-200"
+          >
+            Nezávazně poptat
+          </a>
+
+          {/* Mobile menu button */}
+          <button
+            className="md:hidden flex flex-col gap-1.5 p-2"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Otevřít menu"
+          >
+            <span className={`block w-6 h-px bg-white transition-transform duration-200 ${menuOpen ? "translate-y-[7px] rotate-45" : ""}`} />
+            <span className={`block w-6 h-px bg-white transition-opacity duration-200 ${menuOpen ? "opacity-0" : ""}`} />
+            <span className={`block w-6 h-px bg-white transition-transform duration-200 ${menuOpen ? "-translate-y-[7px] -rotate-45" : ""}`} />
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}

@@ -3,7 +3,9 @@
 import { useCallback, useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import type { Product } from "@/data/products";
-import OrderForm from "./OrderForm";
+import { requestEnquiry } from "@/lib/enquiry";
+import AddToCart from "./cart/AddToCart";
+import { useCart } from "./cart/CartProvider";
 
 const calcProgress = (el: HTMLElement) => {
   const max = el.scrollHeight - el.clientHeight;
@@ -46,7 +48,6 @@ type Props = {
 export default function ProductModal({ product, onClose }: Props) {
   const [activeImage, setActiveImage] = useState(0);
   const [specsOpen, setSpecsOpen] = useState(false);
-  const [orderOpen, setOrderOpen] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
   const {
     ref: mobileDetailsRef,
@@ -60,10 +61,23 @@ export default function ProductModal({ product, onClose }: Props) {
   } = useScrollProgress();
   const closeRef = useRef<HTMLButtonElement>(null);
 
-  const closeOrder = useCallback(() => {
-    setOrderOpen(false);
-    closeRef.current?.focus();
-  }, []);
+  const { openCart } = useCart();
+
+  const showCart = () => {
+    onClose();
+    openCart();
+  };
+
+  const handleEnquire = () => {
+    requestEnquiry({
+      productName: product.name,
+      productColor: product.colors[0]?.name,
+    });
+    onClose();
+    requestAnimationFrame(() => {
+      document.getElementById("kontakt")?.scrollIntoView({ behavior: "smooth" });
+    });
+  };
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -75,14 +89,11 @@ export default function ProductModal({ product, onClose }: Props) {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key !== "Escape") return;
-      // Escape zavře nejdřív objednávku, teprve pak detail.
-      if (orderOpen) closeOrder();
-      else onClose();
+      if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose, orderOpen, closeOrder]);
+  }, [onClose]);
 
   const scrollToImage = (index: number) => {
     const el = carouselRef.current;
@@ -138,7 +149,7 @@ export default function ProductModal({ product, onClose }: Props) {
             ref={carouselRef}
             onScroll={onCarouselScroll}
             className="flex overflow-x-auto snap-x snap-mandatory"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none", maxHeight: "52vh" }}
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none", maxHeight: "45vh" }}
           >
             {product.images.map((img, i) => (
               <div
@@ -265,22 +276,8 @@ export default function ProductModal({ product, onClose }: Props) {
         </div>
 
         {/* CTA — always visible at bottom */}
-        <div className="flex-shrink-0 p-6 pt-4 flex flex-col gap-3 border-t border-white/8">
-          <button
-            onClick={() => setOrderOpen(true)}
-            className="inline-flex items-center justify-center px-6 py-4 bg-[#C8A028] text-[#0A0A0A] text-sm tracking-[0.15em] uppercase font-medium hover:bg-[#D4AF40] transition-colors duration-200 text-center"
-          >
-            Objednat
-          </button>
-          <p className="text-center text-xs text-[#888580] leading-relaxed">
-            Nic neplatíte online — zavoláme a vše domluvíme.
-          </p>
-          <button
-            onClick={onClose}
-            className="inline-flex items-center justify-center px-6 py-4 border border-white/20 text-[#F0EDE8] text-sm tracking-[0.15em] uppercase hover:border-white/40 transition-colors duration-200"
-          >
-            Zpět na kolekci
-          </button>
+        <div className="flex-shrink-0 p-6 pt-4 border-t border-white/8">
+          <AddToCart product={product} onShowCart={showCart} onEnquire={handleEnquire} />
         </div>
       </div>
 
@@ -386,7 +383,7 @@ export default function ProductModal({ product, onClose }: Props) {
                   {product.colors.map((color) => (
                     <div
                       key={color.name}
-                      className="w-8 h-8 rounded-full ring-1 ring-white/20 cursor-pointer hover:ring-[#C8A028] transition-all duration-200"
+                      className="w-8 h-8 rounded-full ring-1 ring-white/20"
                       style={{ backgroundColor: color.hex }}
                       title={color.name}
                     />
@@ -436,32 +433,12 @@ export default function ProductModal({ product, onClose }: Props) {
           </div>
 
           {/* CTA — always visible at bottom */}
-          <div className="flex-shrink-0 p-8 xl:p-10 pt-4 flex flex-col gap-3 border-t border-white/8">
-            <button
-              onClick={() => setOrderOpen(true)}
-              className="inline-flex items-center justify-center px-6 py-4 bg-[#C8A028] text-[#0A0A0A] text-sm tracking-[0.15em] uppercase font-medium hover:bg-[#D4AF40] transition-colors duration-200 text-center"
-            >
-              Objednat
-            </button>
-            <p className="text-center text-xs text-[#888580] leading-relaxed">
-              Nic neplatíte online — zavoláme a vše domluvíme.
-            </p>
-            <button
-              onClick={onClose}
-              className="inline-flex items-center justify-center px-6 py-4 border border-white/20 text-[#F0EDE8] text-sm tracking-[0.15em] uppercase hover:border-white/40 transition-colors duration-200"
-            >
-              Zpět na kolekci
-            </button>
+          <div className="flex-shrink-0 p-8 xl:p-10 pt-6 border-t border-white/8">
+            <AddToCart product={product} onShowCart={showCart} onEnquire={handleEnquire} />
           </div>
         </div>
       </div>
 
-      <OrderForm
-        product={product}
-        open={orderOpen}
-        onClose={closeOrder}
-        onDone={onClose}
-      />
     </div>
   );
 }
