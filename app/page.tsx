@@ -9,13 +9,14 @@ import CtaBlock from "@/components/CtaBlock";
 import FAQ from "@/components/FAQ";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import CartProvider from "@/components/cart/CartProvider";
 import { getVisibleProducts } from "@/lib/products-store";
 
 export default async function Home() {
   const products = await getVisibleProducts();
 
   return (
-    <>
+    <CartProvider products={products}>
       <Header />
       <main>
         <Hero />
@@ -29,6 +30,6 @@ export default async function Home() {
         <Contact />
       </main>
       <Footer />
-    </>
+    </CartProvider>
   );
 }

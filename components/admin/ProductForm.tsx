@@ -56,6 +56,9 @@ const SPEC_LABELS: Record<keyof Draft["specs"], string> = {
   velikosti: "Velikosti",
 };
 
+const SIZES_HINT =
+  "Z tohohle se skládá výběr velikosti v košíku: rozsah „46 – 66“ (po dvou) nebo výčet „48, 50, 52“.";
+
 function toDraft(product: Product): Draft {
   return {
     name: product.name,
@@ -67,6 +70,7 @@ function toDraft(product: Product): Draft {
     occasion: product.occasion,
     specs: product.specs,
     colors: product.colors,
+    priceCzk: product.priceCzk,
     hidden: product.hidden ?? false,
   };
 }
@@ -324,6 +328,30 @@ export default function ProductForm({
               />
             </Field>
           </div>
+
+          <div className="grid gap-5 sm:grid-cols-2">
+            <Field
+              label="Cena (Kč) — nepovinné"
+              hint="Ukáže se v detailu a v košíku. Bez ceny web napíše „Cena na dotaz“."
+              error={fieldErrors.priceCzk}
+            >
+              <input
+                type="number"
+                inputMode="numeric"
+                min={1}
+                step={1}
+                value={draft.priceCzk ?? ""}
+                onChange={(event) =>
+                  update(
+                    "priceCzk",
+                    event.target.value === "" ? undefined : Number(event.target.value),
+                  )
+                }
+                placeholder="např. 12900"
+                className={inputClass(fieldErrors.priceCzk)}
+              />
+            </Field>
+          </div>
         </section>
 
         <section className="mt-12">
@@ -356,6 +384,7 @@ export default function ProductForm({
                 <Field
                   key={key}
                   label={SPEC_LABELS[key]}
+                  hint={key === "velikosti" ? SIZES_HINT : undefined}
                   error={fieldErrors[`specs.${key}`]}
                 >
                   <input

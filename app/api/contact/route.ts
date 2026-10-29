@@ -1,41 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
 
-// Simple in-memory rate limiter: max 3 requests per 10 minutes per IP
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-const RATE_LIMIT = 3;
-const WINDOW_MS = 10 * 60 * 1000;
+import { notifyNewLead } from "@/lib/lead-notify";
+import { contactSchema, fieldErrors } from "@/lib/lead-schema";
+import { createLead, isDatabaseConfigured } from "@/lib/leads-store";
+import { clientIp, createRateLimiter } from "@/lib/rate-limit";
 
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimitMap.get(ip);
+const isRateLimited = createRateLimiter(3, 10 * 60 * 1000);
 
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + WINDOW_MS });
-    return false;
-  }
-
-  if (entry.count >= RATE_LIMIT) return true;
-
-  entry.count++;
-  return false;
-}
-
-type ContactPayload = {
-  name: string;
-  email: string;
-  phone?: string;
-  message: string;
-  hp_field?: string; // honeypot
-};
+const SUCCESS = { success: true, message: "Zpráva přijata. Ozveme se do 24 hodin." };
 
 export async function POST(request: NextRequest) {
-  // Rate limiting
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-  if (isRateLimited(ip)) {
+  if (isRateLimited(clientIp(request.headers))) {
     return NextResponse.json(
       { error: "Příliš mnoho pokusů. Zkuste to prosím za chvíli." },
-      { status: 429 }
+      { status: 429 },
     );
   }
 
@@ -43,59 +21,45 @@ export async function POST(request: NextRequest) {
   try {
     body = await request.json();
   } catch {
+    return NextResponse.json({ error: "Neplatný formát dat." }, { status: 400 });
+  }
+
+  const parsed = contactSchema.safeParse(body);
+  if (!parsed.success) {
+    const fields = fieldErrors(parsed.error);
     return NextResponse.json(
-      { error: "Neplatný formát dat." },
-      { status: 400 }
+      { error: Object.values(fields)[0] ?? "Zkontrolujte prosím formulář.", fields },
+      { status: 422 },
     );
   }
 
-  const payload = body as ContactPayload;
+  const { hp_field, ...contact } = parsed.data;
+  // Honeypot — bots fill this, humans don't
+  if (hp_field) return NextResponse.json(SUCCESS);
 
-  // Honeypot check — bots fill this, humans don't
-  if (payload.hp_field) {
-    return NextResponse.json(
-      { success: true, message: "Zpráva přijata. Ozveme se do 24 hodin." },
-      { status: 200 }
-    );
+  let saved = false;
+  if (isDatabaseConfigured()) {
+    try {
+      await createLead({ source: "contact", ...contact });
+      saved = true;
+    } catch (error) {
+      console.error("[contact] uložení do databáze selhalo:", error);
+    }
   }
 
-  if (!payload.name?.trim()) {
-    return NextResponse.json({ error: "Jméno je povinné." }, { status: 422 });
-  }
-  if (!payload.email?.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
-    return NextResponse.json(
-      { error: "Zadejte platnou e-mailovou adresu." },
-      { status: 422 }
-    );
-  }
-  if (!payload.message?.trim()) {
-    return NextResponse.json({ error: "Zpráva je povinná." }, { status: 422 });
-  }
+  const notified = await notifyNewLead(`Nová poptávka od ${contact.name}`, [
+    ["Jméno", contact.name],
+    ["E-mail", contact.email],
+    ["Telefon", contact.phone],
+    ["Zpráva", contact.message],
+  ]);
 
-  const resend = new Resend(process.env.RESEND_API_KEY);
-
-  const { error } = await resend.emails.send({
-    from: "Suitsberry <onboarding@resend.dev>",
-    to: "marsalektadeas@gmail.com",
-    subject: `Nová poptávka od ${payload.name}`,
-    html: `
-      <p><strong>Jméno:</strong> ${payload.name}</p>
-      <p><strong>Email:</strong> ${payload.email}</p>
-      <p><strong>Telefon:</strong> ${payload.phone || "-"}</p>
-      <p><strong>Zpráva:</strong><br/>${payload.message}</p>
-    `,
-  });
-
-  if (error) {
-    console.error("Resend send failed:", error);
+  if (!saved && !notified) {
     return NextResponse.json(
       { error: "Odeslání se nezdařilo. Zkuste to prosím znovu nebo nám zavolejte." },
-      { status: 502 }
+      { status: 502 },
     );
   }
 
-  return NextResponse.json(
-    { success: true, message: "Zpráva přijata. Ozveme se do 24 hodin." },
-    { status: 200 }
-  );
+  return NextResponse.json(SUCCESS);
 }

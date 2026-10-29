@@ -2,7 +2,19 @@ import { redirect } from "next/navigation";
 
 import AdminHeader from "@/components/admin/AdminHeader";
 import { isAdminAuthenticated } from "@/lib/admin-session";
+import { countNewLeads, isDatabaseConfigured } from "@/lib/leads-store";
 import { isStorageConfigured } from "@/lib/products-store";
+
+/** Počet v navigaci je jen pomůcka — když databáze neodpoví, admin musí jet dál. */
+async function loadNewLeadCount(): Promise<number> {
+  if (!isDatabaseConfigured()) return 0;
+  try {
+    return await countNewLeads();
+  } catch (error) {
+    console.error("[admin] počet nových poptávek selhal:", error);
+    return 0;
+  }
+}
 
 /**
  * Druhá obrana za proxy.ts — kdyby matcher někdy přestal sedět,
@@ -17,7 +29,7 @@ export default async function AdminAppLayout({
 
   return (
     <>
-      <AdminHeader />
+      <AdminHeader newLeadCount={await loadNewLeadCount()} />
 
       {!isStorageConfigured() && (
         <div

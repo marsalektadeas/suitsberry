@@ -1,11 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function AdminHeader() {
+const navLinkClass =
+  "transition-colors duration-200 focus-visible:outline-none focus-visible:text-[#C8A028] focus-visible:underline";
+
+export default function AdminHeader({ newLeadCount }: { newLeadCount: number }) {
   const router = useRouter();
+  const pathname = usePathname();
+  const isLeads = pathname.startsWith("/admin/poptavky");
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   async function handleLogout() {
@@ -31,16 +36,41 @@ export default function AdminHeader() {
           <span className="ml-3 align-middle text-[0.65rem] tracking-[0.25em] uppercase text-[#888580]"
             style={{ fontFamily: "var(--font-inter)" }}
           >
-            Správa kolekce
+            Správa
           </span>
         </Link>
+
+        <nav className="flex items-center gap-5 text-sm" aria-label="Sekce adminu">
+          <Link
+            href="/admin"
+            aria-current={!isLeads ? "page" : undefined}
+            className={`${navLinkClass} ${!isLeads ? "text-[#C8A028]" : "text-[#A09C97] hover:text-[#C8A028]"}`}
+          >
+            Kolekce
+          </Link>
+          <Link
+            href="/admin/poptavky"
+            aria-current={isLeads ? "page" : undefined}
+            className={`${navLinkClass} inline-flex items-center gap-1.5 ${isLeads ? "text-[#C8A028]" : "text-[#A09C97] hover:text-[#C8A028]"}`}
+          >
+            Objednávky
+            {newLeadCount > 0 && (
+              <span
+                className="min-w-5 rounded-full bg-[#C8A028] px-1.5 text-center text-xs font-medium leading-5 text-[#0A0A0A]"
+                aria-label={`${newLeadCount} nových`}
+              >
+                {newLeadCount}
+              </span>
+            )}
+          </Link>
+        </nav>
 
         <div className="flex items-center gap-5 text-sm">
           <a
             href="/"
             target="_blank"
             rel="noreferrer"
-            className="text-[#A09C97] hover:text-[#C8A028] transition-colors duration-200 focus-visible:outline-none focus-visible:text-[#C8A028] focus-visible:underline"
+            className="hidden sm:inline text-[#A09C97] hover:text-[#C8A028] transition-colors duration-200 focus-visible:outline-none focus-visible:text-[#C8A028] focus-visible:underline"
           >
             Zobrazit web ↗
           </a>

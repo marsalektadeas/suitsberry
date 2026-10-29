@@ -16,6 +16,8 @@ export type Product = {
   id: string
   name: string
   hidden?: boolean
+  /** Cena v Kč. Bez ceny web ukáže „Cena na dotaz“. */
+  priceCzk?: number
   tagline: string
   description: string
   heroImage: string
