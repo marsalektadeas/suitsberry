@@ -20,14 +20,16 @@ export default function Hero() {
   return (
     <section className="relative h-screen min-h-[640px] flex overflow-hidden bg-[#0A0A0A]">
       {/* Image — starts below fixed header so model head is visible */}
-      <div className="absolute inset-x-0 bottom-0 top-16 md:top-20">
+      {/* Fotka je na výšku — na desktopu vyplní pravou část, vlevo pod textem je čisté pozadí. */}
+      <div className="absolute right-0 left-0 md:left-[45%] bottom-0 top-16 md:top-20">
         <Image
-          src="/hero.png"
+          src="/hero.jpg"
           alt="Suitsberry — prémiový pánský oblek"
           fill
           priority
-          className="object-cover object-[55%_top]"
-          sizes="100vw"
+          quality={95}
+          className="object-cover object-[20%_top] md:object-[50%_15%]"
+          sizes="(min-width: 768px) 55vw, 100vw"
         />
         {/* Fade left → dark for text readability */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A] via-[#0A0A0A]/75 md:via-[#0A0A0A]/50 to-transparent" />
