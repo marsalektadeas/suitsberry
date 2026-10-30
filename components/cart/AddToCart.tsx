@@ -10,7 +10,6 @@ type Props = {
   product: Product;
   /** Zavře detail obleku a otevře košík. */
   onShowCart: () => void;
-  onEnquire: () => void;
 };
 
 const primaryButtonClass =
@@ -20,7 +19,7 @@ const selectClass =
   "w-full h-12 bg-[#141414] border px-3 text-[#F0EDE8] text-base focus:outline-none focus:border-[#C8A028] transition-colors duration-200";
 
 /** Výběr barvy a velikosti + přidání do košíku. Velikost je povinná. */
-export default function AddToCart({ product, onShowCart, onEnquire }: Props) {
+export default function AddToCart({ product, onShowCart }: Props) {
   const { add } = useCart();
   const id = useId();
   const sizes = parseSizes(product.specs.velikosti);
@@ -106,14 +105,7 @@ export default function AddToCart({ product, onShowCart, onEnquire }: Props) {
       )}
 
       <p className="text-center text-xs text-[#888580] leading-relaxed">
-        Nic neplatíte online — objednávku schválíme a zavoláme vám.{" "}
-        <button
-          type="button"
-          onClick={onEnquire}
-          className="text-[#A09C97] underline underline-offset-4 hover:text-[#C8A028] focus-visible:text-[#C8A028] focus-visible:outline-none"
-        >
-          Nebo jen nezávazně poptat
-        </button>
+        Nic neplatíte online — objednávku schválíme a zavoláme vám.
       </p>
     </div>
   );
