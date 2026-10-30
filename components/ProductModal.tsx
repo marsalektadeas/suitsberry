@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useEffectEvent, useState, useRef } from "react";
 import Image from "next/image";
 import type { Product } from "@/data/products";
-import { requestEnquiry } from "@/lib/enquiry";
 import { formatCzk } from "@/lib/price";
 import AddToCart from "./cart/AddToCart";
 import { useCart } from "./cart/CartProvider";
@@ -69,17 +68,6 @@ export default function ProductModal({ product, onClose }: Props) {
     openCart();
   };
 
-  const handleEnquire = () => {
-    requestEnquiry({
-      productName: product.name,
-      productColor: product.colors[0]?.name,
-    });
-    onClose();
-    requestAnimationFrame(() => {
-      document.getElementById("kontakt")?.scrollIntoView({ behavior: "smooth" });
-    });
-  };
-
   useEffect(() => {
     document.body.style.overflow = "hidden";
     closeRef.current?.focus();
@@ -129,7 +117,6 @@ export default function ProductModal({ product, onClose }: Props) {
     { label: "Zapínání", value: product.specs.zapinani },
     { label: "Vzor", value: product.specs.vzor },
     { label: "Materiál", value: product.specs.material },
-    { label: "Velikosti", value: product.specs.velikosti },
   ];
 
   return (
@@ -259,7 +246,7 @@ export default function ProductModal({ product, onClose }: Props) {
               aria-expanded={specsOpen}
             >
               <span className="text-sm tracking-[0.2em] uppercase text-[#A09C97]">
-                Technické detaily
+                Detaily obleku
               </span>
               <span
                 className={`text-[#C8A028] text-lg leading-none transition-transform duration-300 ${
@@ -294,7 +281,7 @@ export default function ProductModal({ product, onClose }: Props) {
 
         {/* CTA — always visible at bottom */}
         <div className="flex-shrink-0 p-6 pt-4 border-t border-white/8">
-          <AddToCart product={product} onShowCart={showCart} onEnquire={handleEnquire} />
+          <AddToCart product={product} onShowCart={showCart} />
         </div>
       </div>
 
@@ -303,14 +290,23 @@ export default function ProductModal({ product, onClose }: Props) {
         {/* Left — images (58%) */}
         <div className="w-[58%] flex-shrink-0 flex flex-col min-h-0">
           <div className="relative flex-1 min-h-0 bg-[#0A0A0A]">
-            <Image
-              src={product.images[activeImage] ?? product.heroImage}
-              alt={product.name}
-              fill
-              className="object-contain"
-              sizes="58vw"
-              priority
-            />
+            {/* Všechny fotky leží přes sebe a stahují se hned po otevření detailu,
+                takže šipky přepínají bez čekání. Lazy loading je u neviditelných
+                (opacity 0) fotek nestáhne, proto `eager`. */}
+            {product.images.map((img, i) => (
+              <Image
+                key={img}
+                src={img}
+                alt={i === activeImage ? product.name : ""}
+                fill
+                className={`object-contain transition-opacity duration-300 ${
+                  i === activeImage ? "opacity-100" : "opacity-0"
+                }`}
+                sizes="58vw"
+                priority={i === 0}
+                loading={i === 0 ? undefined : "eager"}
+              />
+            ))}
             {imageCount > 1 && <GalleryArrows onStep={stepImage} />}
           </div>
 
@@ -396,7 +392,7 @@ export default function ProductModal({ product, onClose }: Props) {
             {product.colors.length > 0 && (
               <div>
                 <p className="text-sm tracking-[0.2em] uppercase text-[#A09C97] mb-3">
-                  Dostupné barvy
+                  Barva obleku
                 </p>
                 <div className="flex gap-2">
                   {product.colors.map((color) => (
@@ -418,7 +414,7 @@ export default function ProductModal({ product, onClose }: Props) {
                 aria-expanded={specsOpen}
               >
                 <span className="text-sm tracking-[0.2em] uppercase text-[#A09C97]">
-                  Technické detaily
+                  Detaily obleku
                 </span>
                 <span
                   className={`text-[#C8A028] text-lg leading-none transition-transform duration-300 ${
@@ -453,7 +449,7 @@ export default function ProductModal({ product, onClose }: Props) {
 
           {/* CTA — always visible at bottom */}
           <div className="flex-shrink-0 p-8 xl:p-10 pt-6 border-t border-white/8">
-            <AddToCart product={product} onShowCart={showCart} onEnquire={handleEnquire} />
+            <AddToCart product={product} onShowCart={showCart} />
           </div>
         </div>
       </div>

@@ -215,7 +215,7 @@ export default function CheckoutForm({ hidden, lines, summary, onBack, onSubmitt
             name="message"
             value={form.message}
             onChange={handleChange}
-            placeholder="Termín akce, kdy se vám hodí zavolat…"
+            placeholder="Chcete nám k objednávce něco sdělit? Napište to sem."
             rows={3}
             className={`${inputClass} resize-none`}
             {...errorProps("message")}
