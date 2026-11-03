@@ -21,7 +21,7 @@ const faqs = [
   },
   {
     q: "Je možné oblek vrátit nebo vyměnit?",
-    a: "Ano. Když vám oblek nesedne, vyměníme ho zdarma. Stačí nám napsat nebo zavolat a domluvíme se, jak výměnu provedeme.",
+    a: "Ano. Když vám oblek nesedne, vyměníme ho zdarma. Pošlete nám ho zpět do 14 dnů od převzetí, bez poškození. Napište nebo zavolejte a domluvíme se na podrobnostech.",
   },
   {
     q: "Jak vybrat správný střih?",

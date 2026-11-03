@@ -45,10 +45,9 @@ export default function AddedToCartDialog({ product, size, onContinue, onShowCar
       >
         <h2
           id="added-to-cart-title"
-          className="flex items-center gap-3 text-2xl font-normal text-[#F0EDE8]"
-          style={{ fontFamily: "Cormorant Garamond, Georgia, serif" }}
+          className="flex items-center gap-2.5 text-base font-medium text-[#F0EDE8]"
         >
-          <span className="text-[#C8A028] text-xl" aria-hidden="true">✓</span>
+          <span className="text-[#C8A028]" aria-hidden="true">✓</span>
           Přidáno do košíku
         </h2>
 
@@ -58,7 +57,7 @@ export default function AddedToCartDialog({ product, size, onContinue, onShowCar
           </div>
           <div className="min-w-0">
             <p
-              className="text-2xl font-medium text-[#F0EDE8]"
+              className="text-2xl font-semibold leading-tight text-[#F0EDE8]"
               style={{ fontFamily: "Cormorant Garamond, Georgia, serif" }}
             >
               {product.name}
