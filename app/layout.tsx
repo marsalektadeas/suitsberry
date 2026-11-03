@@ -16,14 +16,14 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://suitsberry.cz"),
-  title: "Suitsberry — Prémiové pánské obleky",
+  title: "Suitsberry | Prémiové pánské obleky",
   description:
     "Suitsberry je značka prémiových pánských obleků pro muže, kteří chtějí zanechat správný dojem. Osobní přístup, dokonalý střih, elegantní styl.",
   alternates: {
     canonical: "https://suitsberry.cz",
   },
   openGraph: {
-    title: "Suitsberry — Prémiové pánské obleky",
+    title: "Suitsberry | Prémiové pánské obleky",
     description:
       "Prémiové pánské obleky pro muže, kteří chtějí zanechat správný dojem.",
     type: "website",

@@ -5,11 +5,11 @@ import { useState } from "react";
 const faqs = [
   {
     q: "Jak probíhá konzultace?",
-    a: "Konzultace je bezplatná a probíhá online nebo osobně. Popíšete nám příležitost, svůj styl a preference — my vám doporučíme správný oblek, střih a barvu. Žádné závazky, žádný tlak.",
+    a: "Konzultace je bezplatná a probíhá online nebo osobně. Popíšete nám příležitost, svůj styl a preference a my vám doporučíme oblek, střih i barvu. Konzultace vás k ničemu nezavazuje.",
   },
   {
     q: "Jaké velikosti jsou dostupné?",
-    a: "Naše obleky jsou dostupné ve velikostech 46 až 66. Pokud si nejste jistí svou velikostí, poradíme vám při konzultaci — stačí znát obvod hrudníku a výšku.",
+    a: "Naše obleky jsou dostupné ve velikostech 46 až 66. Pokud si nejste jistí svou velikostí, poradíme vám při konzultaci. Stačí znát obvod hrudníku a výšku.",
   },
   {
     q: "Jak dlouho trvá dodání?",
@@ -21,7 +21,7 @@ const faqs = [
   },
   {
     q: "Je možné oblek vrátit nebo vyměnit?",
-    a: "Záleží na konkrétní situaci — kontaktujte nás a vyřešíme to individuálně. Záleží nám na tom, abyste byli spokojení, a vždy hledáme rozumné řešení.",
+    a: "Ano. Když vám oblek nesedne, vyměníme ho zdarma. Stačí nám napsat nebo zavolat a domluvíme se, jak výměnu provedeme.",
   },
   {
     q: "Jak vybrat správný střih?",
@@ -47,7 +47,7 @@ export default function FAQ() {
               <em className="not-italic text-[#C8A028]">otázky?</em>
             </h2>
             <p className="text-[#A09C97] text-base leading-relaxed max-w-sm">
-              Nejčastější dotazy na jednom místě. Nezodpovězeno? Napište nám —
+              Nejčastější dotazy na jednom místě. Nenašli jste odpověď? Napište nám,
               odpovíme do 24 hodin.
             </p>
           </div>

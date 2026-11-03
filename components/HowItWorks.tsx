@@ -2,7 +2,7 @@ const steps = [
   {
     step: "1",
     title: "Kontaktujte nás",
-    text: "Napište nám nebo zavolejte. Bezplatná konzultace, žádné závazky.",
+    text: "Napište nám nebo zavolejte. Konzultace je zdarma a nezávazná.",
   },
   {
     step: "2",
@@ -11,8 +11,8 @@ const steps = [
   },
   {
     step: "3",
-    title: "Získáte dojem",
-    text: "Obdržíte oblek, ve kterém budete působit sebevědomě a reprezentativně.",
+    title: "Oblek je váš",
+    text: "Dostanete oblek, ve kterém působíte sebevědomě. Když nesedne, vyměníme ho zdarma.",
   },
 ];
 

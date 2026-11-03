@@ -12,7 +12,7 @@ const testimonials = [
   },
   {
     quote:
-      "Profesionální přístup od první zprávy. Poradili mi se střihem i barvou — výsledek předčil očekávání.",
+      "Profesionální přístup od první zprávy. Poradili mi se střihem i barvou a výsledek předčil moje očekávání.",
     author: "Tomáš R.",
     context: "Business",
   },

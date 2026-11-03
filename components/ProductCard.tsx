@@ -13,7 +13,7 @@ export default function ProductCard({ product, onSelect }: Props) {
     <article
       role="button"
       tabIndex={0}
-      aria-label={`${product.name} — zobrazit detail`}
+      aria-label={`${product.name}, zobrazit detail`}
       className="group cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-[#C8A028] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0A]"
       onClick={() => onSelect(product)}
       onKeyDown={(e) => {
@@ -51,7 +51,7 @@ export default function ProductCard({ product, onSelect }: Props) {
       {/* Info */}
       <div>
         <h3
-          className="text-xl font-light text-white mb-1 group-hover:text-[#C8A028] transition-colors duration-200"
+          className="text-2xl font-medium tracking-[0.01em] text-white mb-1 group-hover:text-[#C8A028] transition-colors duration-200"
           style={{ fontFamily: "Cormorant Garamond, Georgia, serif" }}
         >
           {product.name}

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Zásady ochrany osobních údajů — Suitsberry",
+  title: "Zásady ochrany osobních údajů | Suitsberry",
   description:
     "Informace o zpracování osobních údajů a používání souborů cookie na webu Suitsberry.",
   alternates: {

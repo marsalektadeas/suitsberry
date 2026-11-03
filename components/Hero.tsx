@@ -21,15 +21,16 @@ export default function Hero() {
     <section className="relative h-screen min-h-[640px] flex overflow-hidden bg-[#0A0A0A]">
       {/* Image — starts below fixed header so model head is visible */}
       {/* Fotka je na výšku — na desktopu vyplní pravou část, vlevo pod textem je čisté pozadí. */}
+      {/* Na mobilu object-cover roztáhne fotku podle výšky displeje, takže je vykreslená zhruba 1,7× širší než viewport — odtud 180vw v sizes. */}
       <div className="absolute right-0 left-0 md:left-[45%] bottom-0 top-16 md:top-20">
         <Image
           src="/hero.jpg"
-          alt="Suitsberry — prémiový pánský oblek"
+          alt="Muž v prémiovém obleku Suitsberry"
           fill
           priority
           quality={95}
           className="object-cover object-[20%_top] md:object-[50%_15%]"
-          sizes="(min-width: 768px) 55vw, 100vw"
+          sizes="(min-width: 768px) 55vw, 180vw"
         />
         {/* Fade left → dark for text readability */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A] via-[#0A0A0A]/75 md:via-[#0A0A0A]/50 to-transparent" />
@@ -83,7 +84,7 @@ export default function Hero() {
 
           <p className="text-[#A09C97] text-base md:text-lg font-light leading-relaxed mb-10 max-w-md">
             Prémiové pánské obleky pro muže, kteří chtějí zanechat
-            správný dojem — na každé příležitosti.
+            správný dojem. Při každé příležitosti.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
@@ -102,6 +103,11 @@ export default function Hero() {
               Prohlédnout kolekci
             </a>
           </div>
+
+          <p className="mt-6 text-sm text-[#A09C97]">
+            <span className="text-[#C8A028]" aria-hidden="true">↺ </span>
+            Oblek, který nesedne, vám zdarma vyměníme.
+          </p>
         </div>
       </div>
 
