@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Podmínky užití — Suitsberry",
+  title: "Podmínky užití | Suitsberry",
   description:
-    "Podmínky užití webu Suitsberry — pravidla pro používání stránek suitsberry.cz.",
+    "Podmínky užití webu Suitsberry: pravidla pro používání stránek suitsberry.cz.",
   alternates: {
     canonical: "https://suitsberry.cz/podminky-uziti",
   },
@@ -59,7 +59,7 @@ export default function TermsOfUse() {
               3. Používání webu
             </h2>
             <p>
-              Obsah tohoto webu — texty, fotografie, grafické prvky a design — je
+              Obsah tohoto webu (texty, fotografie, grafické prvky a design) je
               chráněn autorským právem. Jakékoli kopírování, šíření nebo jiné užití
               bez předchozího písemného souhlasu provozovatele je zakázáno.
             </p>

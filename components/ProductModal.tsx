@@ -124,7 +124,7 @@ export default function ProductModal({ product, onClose }: Props) {
       className="fixed inset-0 z-[100] flex items-center justify-center md:p-8"
       role="dialog"
       aria-modal="true"
-      aria-label={`${product.name} — detail obleku`}
+      aria-label={`${product.name}, detail obleku`}
     >
       {/* Backdrop */}
       <div
@@ -227,7 +227,7 @@ export default function ProductModal({ product, onClose }: Props) {
             {product.category}
           </p>
           <h2
-            className="text-4xl font-light text-white leading-tight"
+            className="text-4xl font-medium text-white leading-tight"
             style={{ fontFamily: "Cormorant Garamond, Georgia, serif" }}
           >
             {product.name}
@@ -281,7 +281,7 @@ export default function ProductModal({ product, onClose }: Props) {
 
         {/* CTA — always visible at bottom */}
         <div className="flex-shrink-0 p-6 pt-4 border-t border-white/8">
-          <AddToCart product={product} onShowCart={showCart} />
+          <AddToCart product={product} onShowCart={showCart} onContinueShopping={onClose} />
         </div>
       </div>
 
@@ -376,7 +376,7 @@ export default function ProductModal({ product, onClose }: Props) {
               {product.category}
             </p>
             <h2
-              className="text-4xl xl:text-5xl font-light text-white leading-tight"
+              className="text-4xl xl:text-5xl font-medium text-white leading-tight"
               style={{ fontFamily: "Cormorant Garamond, Georgia, serif" }}
             >
               {product.name}
@@ -449,7 +449,7 @@ export default function ProductModal({ product, onClose }: Props) {
 
           {/* CTA — always visible at bottom */}
           <div className="flex-shrink-0 p-8 xl:p-10 pt-6 border-t border-white/8">
-            <AddToCart product={product} onShowCart={showCart} />
+            <AddToCart product={product} onShowCart={showCart} onContinueShopping={onClose} />
           </div>
         </div>
       </div>

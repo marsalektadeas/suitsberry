@@ -6,17 +6,17 @@ const reasons = [
   {
     number: "01",
     title: "Prémiové materiály",
-    text: "Každý oblek vychází z vybraných látek — vlna, viskóza, polyamid s lycrou. Nosíte kvalitu, která je cítit i vidět.",
+    text: "Každý oblek je z vybraných látek: vlna, viskóza, polyamid s lycrou. Nosíte kvalitu, která je cítit i vidět.",
   },
   {
     number: "02",
     title: "Osobní přístup",
-    text: "Poradíme vám s výběrem. Vy popíšete příležitost a charakter, my postaráme se o zbytek.",
+    text: "Poradíme vám s výběrem. Vy popíšete příležitost a charakter, my se postaráme o zbytek.",
   },
   {
     number: "03",
     title: "Dokonalý střih",
-    text: "Slim fit i regular fit varianty navržené tak, aby seděly. Žádné kompromisy ve střihu ani v detailu.",
+    text: "Slim fit i regular fit navržené tak, aby seděly. Na střihu a detailech nešetříme.",
   },
   {
     number: "04",

@@ -41,7 +41,7 @@ export const products: Product[] = [
     name: "Domenico",
     tagline: "Klasika redefinovaná",
     description:
-      "Domenico byl stvořen pro velké okamžiky. Čistý minimalistický design ve světlých tónech — z něj dělá ideální volbu pro svatby a slavnostní příležitosti za denního světla.",
+      "Domenico byl stvořen pro velké okamžiky. Čistý minimalistický design ve světlých tónech z něj dělá ideální volbu pro svatby a slavnostní příležitosti za denního světla.",
     heroImage: "/products/slim-fit/1.jpg",
     images: [
       "/products/slim-fit/1.jpg",
@@ -66,7 +66,7 @@ export const products: Product[] = [
     name: "Claudio",
     tagline: "Temná elegance",
     description:
-      "Claudio je oblek pro muže, kteří neodolávají kompromisům. Espresso hnědá v slim fit střihu akcentuje siluetu bez přehnanosti — ideální pro večerní příležitosti a moderní business prostředí.",
+      "Claudio je oblek pro muže, kteří neodolávají kompromisům. Espresso hnědá v slim fit střihu zdůrazňuje siluetu bez přehnanosti. Hodí se na večerní příležitosti a moderní business prostředí.",
     heroImage: "/products/espresso/2.jpg",
     images: [
       "/products/espresso/2.jpg",
@@ -92,7 +92,7 @@ export const products: Product[] = [
     name: "Alessandro",
     tagline: "Síla v každém detailu",
     description:
-      "Alessandro spojuje nadčasový business styl s precizním zpracováním. Tmavý pruhovaný vzor z kvalitní vlny s viskózou dává jasný signál — bez zbytečných slov.",
+      "Alessandro spojuje nadčasový business styl s precizním zpracováním. Tmavý pruhovaný vzor z kvalitní vlny s viskózou působí jistě a nenápadně zároveň.",
     heroImage: "/products/stripe-db/1.jpg",
     images: [
       "/products/stripe-db/1.jpg",
@@ -144,7 +144,7 @@ export const products: Product[] = [
     name: "Javier",
     tagline: "Odvaha být jiný",
     description:
-      "Javier byl stvořen pro muže s charakterem. Smaragdová zelená v slim fit střihu — elegantní, sebevědomý, zapamatovatelný. Styl nad konvencí.",
+      "Javier byl stvořen pro muže s charakterem. Smaragdová zelená ve slim fit střihu působí elegantně a sebevědomě a zůstane v paměti.",
     heroImage: "/products/green/1.jpg",
     images: [
       "/products/green/1.jpg",
@@ -171,7 +171,7 @@ export const products: Product[] = [
     name: "Lorenzo",
     tagline: "Síla a jistota",
     description:
-      "Lorenzo je klasická volba pro muže, kteří chtějí vyjádřit spolehlivost a profesionalitu. Královská modrá v slim fit střihu — pro business schůzky, prezentace i formální večery.",
+      "Lorenzo je klasická volba pro muže, kteří chtějí vyjádřit spolehlivost a profesionalitu. Královská modrá ve slim fit střihu se hodí na business schůzky, prezentace i formální večery.",
     heroImage: "/products/blue/3.jpg",
     images: [
       "/products/blue/3.jpg",
@@ -198,7 +198,7 @@ export const products: Product[] = [
     name: "Enzo",
     tagline: "Prémiový výraz",
     description:
-      "Enzo přináší teplou eleganci v jedinečné zlatavé karamelové barvě. Klasický slim fit střih z prémiové vlny s viskózou — pro muže, kteří vědí, jak zaujmout.",
+      "Enzo přináší teplou eleganci v jedinečné zlatavé karamelové barvě. Klasický slim fit střih z prémiové vlny s viskózou pro muže, kteří vědí, jak zaujmout.",
     heroImage: "/products/camel/2.jpg",
     images: [
       "/products/camel/2.jpg",
@@ -224,7 +224,7 @@ export const products: Product[] = [
     name: "Pietro",
     tagline: "Moderní klasik",
     description:
-      "Pietro kombinuje tradiční eleganci dvouřadého zapínání s neutrální béžovou barvou. Precizní AMF stehování z prémiové 100% vlny — pro formální příležitosti i denní nošení.",
+      "Pietro kombinuje tradiční eleganci dvouřadého zapínání s neutrální béžovou barvou. Precizní AMF stehování ze 100% vlny se hodí na formální příležitosti i pro denní nošení.",
     heroImage: "/products/beige/3.jpg",
     images: [
       "/products/beige/3.jpg",
@@ -249,7 +249,7 @@ export const products: Product[] = [
     name: "Ricardo",
     tagline: "Charakter v každé linii",
     description:
-      "Ricardo nabízí rafinovaný proužkový vzor pro muže, kteří chtějí vyniknout v business prostředí. Dvouřadé zapínání s precizními klopami — pro formální přednášky i obchodní večeře.",
+      "Ricardo nabízí rafinovaný proužkový vzor pro muže, kteří chtějí vyniknout v business prostředí. Dvouřadé zapínání s precizními klopami se hodí na formální přednášky i obchodní večeře.",
     heroImage: "/products/stripe/1.jpg",
     images: [
       "/products/stripe/1.jpg",
@@ -275,7 +275,7 @@ export const products: Product[] = [
     hidden: true,
     tagline: "Absolutní elegance",
     description:
-      "Santiago je oblek pro muže, kteří nepotřebují barvy, aby zaujali. Klasická černá v slim fit střihu — pro business schůzky, galavečery i formální večeře.",
+      "Santiago je oblek pro muže, kteří nepotřebují barvy, aby zaujali. Klasická černá ve slim fit střihu se hodí na business schůzky, galavečery i formální večeře.",
     heroImage: "/products/black/hero.jpg",
     images: [
       "/products/black/hero.jpg",

@@ -65,7 +65,7 @@ export default function About() {
               >
                 <Image
                   src="/products/slim-fit/hero.jpg"
-                  alt="Suitsberry — filozofie značky"
+                  alt="Detail obleku Suitsberry"
                   fill
                   className="object-cover object-center"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -107,7 +107,7 @@ export default function About() {
               </p>
               <p>
                 Suitsberry vznikla pro muže, kterým záleží na tom, jak působí.
-                Vybíráme každý detail — střih, materiál, výraz. Protože dojem,
+                Vybíráme každý detail: střih, materiál, výraz. Protože dojem,
                 který zanecháte, se počítá.
               </p>
             </div>
@@ -118,7 +118,7 @@ export default function About() {
                 className="text-[#F0EDE8]/90 group-hover:text-[#C8A028] text-2xl md:text-3xl italic font-light transition-colors duration-300"
                 style={{ fontFamily: "Cormorant Garamond, Georgia, serif" }}
               >
-                „Styl není luxus. Je to nezbytnost."
+                „Styl není luxus. Je to nezbytnost.“
               </p>
             </div>
           </div>

@@ -24,7 +24,7 @@ export default function CtaBlock() {
               <em className="not-italic">změnit dojem?</em>
             </h2>
             <p className="text-[#A09C97] text-base leading-relaxed mb-10 max-w-sm">
-              Nezávazná konzultace je zdarma. Stačí napsat — ozveme se do 24 hodin.
+              Nezávazná konzultace je zdarma. Stačí napsat a ozveme se do 24 hodin.
             </p>
             <a
               href="#kontakt"

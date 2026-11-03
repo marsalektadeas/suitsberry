@@ -80,7 +80,7 @@ export default function Contact() {
 
             <p className="text-[#A09C97] leading-relaxed mb-10 text-base max-w-sm">
               Každá konzultace je zdarma a nezávazná. Rádi vám pomůžeme najít
-              správný oblek — na každou příležitost, pro každý charakter.
+              oblek, který sedí vám i příležitosti.
             </p>
 
             <div className="space-y-4">
@@ -188,7 +188,7 @@ export default function Contact() {
                     name="message"
                     value={form.message}
                     onChange={handleChange}
-                    placeholder="Popište, co hledáte. Příležitost, styl, preference..."
+                    placeholder="Popište, co hledáte: příležitost, styl, preference…"
                     required
                     rows={4}
                     className={`${inputClass} resize-none`}
@@ -220,7 +220,7 @@ export default function Contact() {
                   disabled={status === "loading"}
                   className="inline-flex items-center px-8 py-4 bg-[#C8A028] text-[#0A0A0A] text-sm tracking-[0.2em] uppercase font-medium hover:bg-[#D4AF40] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
                 >
-                  {status === "loading" ? "Odesílám..." : "Odeslat poptávku"}
+                  {status === "loading" ? "Odesílám…" : "Odeslat poptávku"}
                 </button>
               </form>
             )}

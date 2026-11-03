@@ -2,6 +2,7 @@ const STEPS = [
   "Odešlete objednávku. Nic neplatíte.",
   "Objednávku schválíme a do 24 hodin vám zavoláme.",
   "Domluvíme platbu, dopravu a případně doladíme velikost.",
+  "Když vám oblek nesedne, vyměníme ho zdarma.",
 ];
 
 /** Zákazník musí před odesláním vědět, že nejde o hotový nákup — nejdřív schvalujeme. */

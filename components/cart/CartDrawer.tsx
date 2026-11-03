@@ -149,7 +149,7 @@ export default function CartDrawer() {
           <div className="flex-1 overflow-y-auto p-6">
             <p className="text-[#F0EDE8] text-lg mb-2">Košík je zatím prázdný.</p>
             <p className="text-[#A09C97] text-base leading-relaxed mb-8">
-              Vyberte si oblek v kolekci — v detailu zvolte velikost a přidejte ho do košíku.
+              Vyberte si oblek v kolekci. V detailu zvolte velikost a přidejte ho do košíku.
             </p>
             {lastRemoved && <UndoRemove line={lastRemoved} onUndo={undoRemove} />}
             <button type="button" onClick={browseCollection} className={primaryButton}>

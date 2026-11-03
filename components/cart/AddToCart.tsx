@@ -4,12 +4,16 @@ import { useId, useState } from "react";
 
 import type { Product } from "@/data/products";
 import { parseSizes } from "@/lib/product-sizes";
+import AddedToCartDialog from "./AddedToCartDialog";
 import { useCart } from "./CartProvider";
+import FreeExchangeNote from "./FreeExchangeNote";
 
 type Props = {
   product: Product;
   /** Zavře detail obleku a otevře košík. */
   onShowCart: () => void;
+  /** Zavře detail obleku a vrátí zákazníka ke kolekci. */
+  onContinueShopping: () => void;
 };
 
 const primaryButtonClass =
@@ -19,14 +23,14 @@ const selectClass =
   "w-full h-12 bg-[#141414] border px-3 text-[#F0EDE8] text-base focus:outline-none focus:border-[#C8A028] transition-colors duration-200";
 
 /** Výběr barvy a velikosti + přidání do košíku. Velikost je povinná. */
-export default function AddToCart({ product, onShowCart }: Props) {
+export default function AddToCart({ product, onShowCart, onContinueShopping }: Props) {
   const { add } = useCart();
   const id = useId();
   const sizes = parseSizes(product.specs.velikosti);
   const [color, setColor] = useState(product.colors[0]?.name ?? null);
   const [size, setSize] = useState("");
   const [sizeError, setSizeError] = useState("");
-  const [addedLabel, setAddedLabel] = useState<string | null>(null);
+  const [addedSize, setAddedSize] = useState<string | null>(null);
 
   function handleAdd() {
     if (!size) {
@@ -34,7 +38,7 @@ export default function AddToCart({ product, onShowCart }: Props) {
       return;
     }
     add({ productId: product.id, color, size, quantity: 1 });
-    setAddedLabel(`${product.name}, velikost ${size}`);
+    setAddedSize(size);
   }
 
   return (
@@ -66,7 +70,6 @@ export default function AddToCart({ product, onShowCart }: Props) {
             onChange={(event) => {
               setSize(event.target.value);
               setSizeError("");
-              setAddedLabel(null);
             }}
             aria-invalid={sizeError ? true : undefined}
             aria-describedby={sizeError ? `${id}-size-error` : undefined}
@@ -82,15 +85,9 @@ export default function AddToCart({ product, onShowCart }: Props) {
             ))}
           </select>
         </div>
-        {addedLabel ? (
-          <button type="button" onClick={onShowCart} className={`flex-1 ${primaryButtonClass}`}>
-            Zobrazit košík
-          </button>
-        ) : (
-          <button type="button" onClick={handleAdd} className={`flex-1 ${primaryButtonClass}`}>
-            Přidat do košíku
-          </button>
-        )}
+        <button type="button" onClick={handleAdd} className={`flex-1 ${primaryButtonClass}`}>
+          Přidat do košíku
+        </button>
       </div>
       {sizeError && (
         <p id={`${id}-size-error`} className="-mt-1 text-sm text-red-400">
@@ -98,15 +95,19 @@ export default function AddToCart({ product, onShowCart }: Props) {
         </p>
       )}
 
-      {addedLabel && (
-        <p role="status" className="-mt-1 text-sm text-[#A09C97]">
-          <span className="text-[#C8A028]">✓</span> {addedLabel} je v košíku.
-        </p>
-      )}
-
-      <p className="text-center text-xs text-[#888580] leading-relaxed">
-        Nic neplatíte online — objednávku schválíme a zavoláme vám.
+      <FreeExchangeNote className="justify-center text-xs" />
+      <p className="-mt-2 text-center text-xs text-[#888580] leading-relaxed">
+        Nic neplatíte online. Objednávku schválíme a zavoláme vám.
       </p>
+
+      {addedSize && (
+        <AddedToCartDialog
+          product={product}
+          size={addedSize}
+          onContinue={onContinueShopping}
+          onShowCart={onShowCart}
+        />
+      )}
     </div>
   );
 }
