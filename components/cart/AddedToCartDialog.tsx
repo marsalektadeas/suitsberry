@@ -74,7 +74,7 @@ export default function AddedToCartDialog({ product, size, onContinue, onShowCar
           <button
             type="button"
             onClick={onContinue}
-            className="flex-1 h-12 border border-white/20 px-4 text-sm whitespace-nowrap tracking-[0.1em] uppercase text-[#F0EDE8] transition-colors duration-200 hover:border-white/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C8A028]"
+            className="w-full h-14 sm:h-12 sm:flex-1 border border-white/20 px-4 text-sm whitespace-nowrap tracking-[0.1em] uppercase text-[#F0EDE8] transition-colors duration-200 hover:border-white/50 active:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C8A028]"
           >
             Pokračovat v nákupu
           </button>
@@ -82,7 +82,7 @@ export default function AddedToCartDialog({ product, size, onContinue, onShowCar
             ref={showCartRef}
             type="button"
             onClick={onShowCart}
-            className="flex-1 h-12 bg-[#C8A028] px-4 text-sm whitespace-nowrap tracking-[0.1em] uppercase font-medium text-[#0A0A0A] transition-colors duration-200 hover:bg-[#D4AF40] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C8A028]"
+            className="w-full h-14 sm:h-12 sm:flex-1 bg-[#C8A028] px-4 text-sm whitespace-nowrap tracking-[0.1em] uppercase font-medium text-[#0A0A0A] transition-colors duration-200 hover:bg-[#D4AF40] active:bg-[#B8921F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C8A028]"
           >
             Přejít do košíku
           </button>
