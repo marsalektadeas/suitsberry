@@ -1,7 +1,7 @@
 const STEPS = [
   "Odešlete objednávku. Nic neplatíte.",
   "Objednávku schválíme a do 24 hodin vám zavoláme.",
-  "Domluvíme platbu, dopravu a případně doladíme velikost.",
+  "Domluvíme platbu a případně doladíme velikost. Doprava je zdarma.",
   "Když vám oblek nesedne, vyměníme ho zdarma.",
 ];
 

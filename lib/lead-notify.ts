@@ -76,8 +76,8 @@ export async function sendOrderConfirmation(order: OrderConfirmation): Promise<b
     html: `
 <p>Dobrý den, ${escapeHtml(order.customerName)},</p>
 <p>děkujeme za objednávku <strong>${escapeHtml(order.orderNumber)}</strong>. Zatím nic neplaťte,
-objednávku nejdřív schválíme a do 24 hodin vám zavoláme. Domluvíme platbu,
-dopravu a případně doladíme velikost.</p>
+objednávku nejdřív schválíme a do 24 hodin vám zavoláme. Domluvíme platbu
+a případně doladíme velikost. Doprava je zdarma.</p>
 <ul>${items}</ul>
 <p>${escapeHtml(order.totalLine)}</p>
 <p>Kdybyste potřebovali cokoliv změnit, odpovězte na tento e-mail nebo volejte ${CONTACT_PHONE}.</p>

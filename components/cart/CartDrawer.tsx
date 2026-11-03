@@ -136,7 +136,7 @@ export default function CartDrawer() {
             <p className="text-[#A09C97] text-base leading-relaxed mb-8">
               Zatím nic neplaťte. Do 24 hodin vám zavoláme na číslo{" "}
               <span className="text-[#F0EDE8] whitespace-nowrap">{confirmation.phone}</span>{" "}
-              a domluvíme platbu, dopravu a případně doladíme velikost.
+              a domluvíme platbu, případně doladíme velikost. Doprava je zdarma.
               {confirmation.confirmationSent && (
                 <> Shrnutí objednávky jsme poslali na {confirmation.email}.</>
               )}
@@ -169,7 +169,11 @@ export default function CartDrawer() {
             </div>
 
             <div className="flex-shrink-0 border-t border-white/8 p-6 flex flex-col gap-4">
-              <div className="flex items-baseline justify-between gap-4">
+              <div className="flex items-baseline justify-between gap-4 text-sm">
+                <span className="text-[#A09C97]">Doprava</span>
+                <span className="text-[#C8A028]">Zdarma</span>
+              </div>
+              <div className="-mt-1 flex items-baseline justify-between gap-4">
                 <span className="text-sm tracking-[0.2em] uppercase text-[#A09C97]">Celkem</span>
                 <span className="text-xl text-[#F0EDE8]">
                   {totalCzk > 0 ? formatCzk(totalCzk) : "Cena na dotaz"}
