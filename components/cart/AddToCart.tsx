@@ -6,7 +6,7 @@ import type { Product } from "@/data/products";
 import { parseSizes } from "@/lib/product-sizes";
 import AddedToCartDialog from "./AddedToCartDialog";
 import { useCart } from "./CartProvider";
-import FreeExchangeNote from "./FreeExchangeNote";
+import PurchasePerks from "./PurchasePerks";
 
 type Props = {
   product: Product;
@@ -95,10 +95,7 @@ export default function AddToCart({ product, onShowCart, onContinueShopping }: P
         </p>
       )}
 
-      <FreeExchangeNote className="justify-center text-xs" />
-      <p className="-mt-2 text-center text-xs text-[#888580] leading-relaxed">
-        Nic neplatíte online. Objednávku schválíme a zavoláme vám.
-      </p>
+      <PurchasePerks />
 
       {addedSize && (
         <AddedToCartDialog
